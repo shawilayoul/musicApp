@@ -6,76 +6,18 @@
  */
 /**/
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import Slider from '@react-native-community/slider';
-import TrackPlayer, { Capability, State, useProgress, Event } from 'react-native-track-player';
+import TrackPlayer, { State, useProgress} from 'react-native-track-player';
 import Icon from 'react-native-vector-icons/Ionicons';
-import tracks from '../assests/data/track';
+import { useSetUpTrackPlayer } from '../hooks/useSetupTrackPlayer';
+
 
 const MusicPlayer = () => {
     const progress = useProgress();
     const [isPlayerReady, setIsPlayerReady] = useState(false);
     const [currentTrack, setCurrentTrack] = useState({ title: '', artist: '', artwork: 'https://media.istockphoto.com/id/607260652/fr/photo/trio-musical-cubain.webp?a=1&b=1&s=612x612&w=0&k=20&c=-dzpDI4Aw2pW91eBHFkpQugdC0A1jqNEsOo9glHvjbM=' });  // State to track if the player is ready
-    useEffect(() => {
-        const setupPlayer = async () => {
-            try {
-                // Setup the player
-                await TrackPlayer.setupPlayer();
-                // Update options for the player (e.g., notifications, capabilities)
-                await TrackPlayer.updateOptions({
-                    capabilities: [
-                        Capability.Play,
-                        Capability.Pause,
-                        Capability.SkipToNext,
-                        Capability.SkipToPrevious,
-                        Capability.Stop,
-                    ],
-                    notificationCapabilities: [
-                        Capability.Play,
-                        Capability.Pause,
-                        Capability.SkipToNext,
-                        Capability.SkipToPrevious,
-                        Capability.Stop,
-                    ],
-                    compactCapabilities: [
-                        Capability.Play,
-                        Capability.Pause,
-                        Capability.SkipToNext,
-                        Capability.SkipToPrevious,
-                        Capability.Stop,
-                    ],
-                });
-
-                // Add a track to the player queue
-                await TrackPlayer.add(tracks);
-
-                // Play the first track automatically
-                //await TrackPlayer.play();
-
-                // Event listener for when the playback queue ends
-                TrackPlayer.addEventListener(Event.PlaybackQueueEnded, async () => {
-                    console.log('Queue ended, skipping back to the first track...');
-                    await TrackPlayer.seekTo(0);  // Seek to the start of the first track
-                    await TrackPlayer.play();     // Play the first track
-                });
-
-                // Update current track info when the player starts
-                updateCurrentTrackInfo();
-
-                // Mark the player as ready
-                setIsPlayerReady(true);
-            } catch (error) {
-                console.error('Error setting up TrackPlayer:', error);
-            }
-        };
-
-        setupPlayer();
-        // Cleanup on component unmount
-        return () => {
-            TrackPlayer.reset();
-        };
-    }, []);
 
     //formatime to display the progress par 
     const formatTime = (seconds: number) => {
@@ -105,6 +47,10 @@ const MusicPlayer = () => {
             }
         }
     };
+
+    //set up track player
+
+    useSetUpTrackPlayer(updateCurrentTrackInfo, setIsPlayerReady);
     // Function to toggle play/pause
     const togglePlayback = async () => {
         const currentState = (await TrackPlayer.getPlaybackState()).state;

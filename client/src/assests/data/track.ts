@@ -1,14 +1,14 @@
-// Define the type for each track in the queue
-/*type Track = {
+
+type Track = {
   id: number;
   url: any;  // You can specify a more specific type if you know it (e.g., string for URLs)
   title: string;
   artist: string;
   artwork: string;
 };
-*/
 
-const tracks = [
+
+const tracks:Track[] = [
   {
     id: 1,
     url: require('../songs/FJULaFOI.mp3'),

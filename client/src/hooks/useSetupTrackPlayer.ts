@@ -1,78 +1,66 @@
-import {useEffect, useRef, useState} from 'react';
-import TrackPlayer, {
-  Capability,
-  RatingType,
-  RepeatMode,
-  State,
-  usePlaybackState,
-  useProgress,
-} from 'react-native-track-player';
+import { SetStateAction, useEffect } from 'react';
+import TrackPlayer, { Capability,Event } from 'react-native-track-player';
+import tracks from '../assests/data/track';
 
-const tracks = [
-  {
-    id: '1',
-    url: require('../../assests/song4.mp3'),
-    title: 'Track 1',
-    artist: 'Artist 1',
-    artwork: 'https://example.com/track1.jpg',
-  },
-  {
-    id: '2',
-    url: require('../../assests/song4.mp3'),
-    title: 'Track 2',
-    artist: 'Artist 2',
-    artwork: 'https://example.com/track2.jpg',
-  },
-];
-
-const setupPlayer = async () => {
-  await TrackPlayer.setupPlayer({
-    maxCacheSize: 1024 * 10,
-  });
-  await TrackPlayer.updateOptions({
-    ratingType: RatingType.Heart,
-    capabilities: [
-      Capability.Play,
-      Capability.Pause,
-      Capability.SkipToNext,
-      Capability.SkipToPrevious,
-      Capability.Stop,
-    ],
-  });
-  await TrackPlayer.setVolume(0.3);
-  await TrackPlayer.setRepeatMode(RepeatMode.Queue);
-
-  await TrackPlayer.add(tracks);
-};
-
-
-export const useSetupTrackPlayer = () => {
-  const isInitialized = useRef(false);
-  const [trackTitle, setTrackTitle] = useState('');
-const [trackArtist, setTrackArtist] = useState('');
-const [trackArtwork, setTrackArtwork] = useState('');
-
-const loadTracks = async () => {
-  await TrackPlayer.add(tracks);
-  updateTrackInfo();
-};
-const updateTrackInfo = async () => {
-  const currentTrack = await TrackPlayer.getActiveTrackIndex();
-  const trackObject = await TrackPlayer.getTrack(Number(currentTrack));
-  if (trackObject) {
-    setTrackTitle(trackObject.title);
-    setTrackArtist(trackObject.artist);
-    setTrackArtwork(trackObject.artwork);
-  }
-};
-
+export const useSetUpTrackPlayer = ( updateCurrentTrackInfo: { (): Promise<void>; (): void; }, setIsPlayerReady: { (value: SetStateAction<boolean>): void; (arg0: boolean): void; }) => {
   useEffect(() => {
-    if (isInitialized.current) {
-      return;
-    }
-    // Add your track or playlist
+    const setupPlayer = async () => {
+      try {
+        // Setup the player
+        await TrackPlayer.setupPlayer();
+        // Update options for the player (e.g., notifications, capabilities)
+        await TrackPlayer.updateOptions({
+          capabilities: [
+            Capability.Play,
+            Capability.Pause,
+            Capability.SkipToNext,
+            Capability.SkipToPrevious,
+            Capability.Stop,
+          ],
+          notificationCapabilities: [
+            Capability.Play,
+            Capability.Pause,
+            Capability.SkipToNext,
+            Capability.SkipToPrevious,
+            Capability.Stop,
+          ],
+          compactCapabilities: [
+            Capability.Play,
+            Capability.Pause,
+            Capability.SkipToNext,
+            Capability.SkipToPrevious,
+            Capability.Stop,
+          ],
+        });
+
+        // Add a track to the player queue
+        await TrackPlayer.add(tracks);
+
+        // Play the first track automatically
+        //await TrackPlayer.play();
+
+        // Event listener for when the playback queue ends
+        TrackPlayer.addEventListener(Event.PlaybackQueueEnded, async () => {
+          console.log('Queue ended, skipping back to the first track...');
+          await TrackPlayer.seekTo(0); // Seek to the start of the first track
+          await TrackPlayer.play(); // Play the first track
+        });
+
+        // Update current track info when the player starts
+        updateCurrentTrackInfo();
+
+        // Mark the player as ready
+        setIsPlayerReady(true);
+      } catch (error) {
+        console.error('Error setting up TrackPlayer:', error);
+      }
+    };
 
     setupPlayer();
-    loadTracks();
+    // Cleanup on component unmount
+    return () => {
+      TrackPlayer.reset();
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };
