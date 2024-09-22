@@ -1,9 +1,9 @@
 import React from 'react';
-import { Text, View } from 'react-native';
-
+import {  View } from 'react-native';
+import { Text } from 'react-native';
 const FavoritesScreen = () => {
     return (
-        <View><Text>Favorite Screen </Text></View>
+        <View><Text>favorite</Text></View>
     );
 };
 

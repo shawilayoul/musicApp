@@ -1,5 +1,5 @@
 
-type Track = {
+export type Track = {
   id: number;
   url: any;  // You can specify a more specific type if you know it (e.g., string for URLs)
   title: string;

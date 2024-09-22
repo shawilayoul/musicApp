@@ -7,9 +7,9 @@
 /**/
 
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, SafeAreaView } from 'react-native';
 import Slider from '@react-native-community/slider';
-import TrackPlayer, { State, useProgress} from 'react-native-track-player';
+import TrackPlayer, { State, useProgress } from 'react-native-track-player';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useSetUpTrackPlayer } from '../hooks/useSetupTrackPlayer';
 
@@ -19,12 +19,12 @@ const MusicPlayer = () => {
     const [isPlayerReady, setIsPlayerReady] = useState(false);
     const [currentTrack, setCurrentTrack] = useState({ title: '', artist: '', artwork: 'https://media.istockphoto.com/id/607260652/fr/photo/trio-musical-cubain.webp?a=1&b=1&s=612x612&w=0&k=20&c=-dzpDI4Aw2pW91eBHFkpQugdC0A1jqNEsOo9glHvjbM=' });  // State to track if the player is ready
 
-    //formatime to display the progress par 
+    //formatime to display the progress par
     const formatTime = (seconds: number) => {
         const mins = Math.floor(seconds / 60);
         const secs = Math.floor(seconds % 60);
         return `${mins}: ${secs < 10 ? '0' : ''} ${secs}`;
-    }
+    };
 
     // Function to update the current track information
     const updateCurrentTrackInfo = async () => {
@@ -81,40 +81,40 @@ const MusicPlayer = () => {
     };
 
     return (
-        <View style={styles.container}>
-            <Image source={{ uri: currentTrack.artwork }} style={styles.artwork} />
-            <Text style={styles.title}>{currentTrack.title} </Text>
-            <Text style={styles.artist}>{currentTrack.artist} </Text>
-            <Slider
-                style={styles.progress}
-                value={progress.position}
-                minimumValue={0}
-                maximumValue={progress.duration}
-                onSlidingComplete={async value => {
-                    await TrackPlayer.seekTo(value);
-                }}
-            />
-            <View style={styles.progressTime}>
-                <Text>{formatTime(progress.position)}</Text>
-                <Text>{formatTime(progress.duration - progress.position)}</Text>
-            </View>
+        <SafeAreaView style={styles.container}>
+                <Image source={{ uri: currentTrack.artwork }} style={styles.artwork} />
+                <Text style={styles.title}>{currentTrack.title} </Text>
+                <Text style={styles.artist}>{currentTrack.artist} </Text>
+                <Slider
+                    style={styles.progress}
+                    value={progress.position}
+                    minimumValue={0}
+                    maximumValue={progress.duration}
+                    onSlidingComplete={async value => {
+                        await TrackPlayer.seekTo(value);
+                    }}
+                />
+                <View style={styles.progressTime}>
+                    <Text>{formatTime(progress.position)}</Text>
+                    <Text>{formatTime(progress.duration - progress.position)}</Text>
+                </View>
 
-            <View style={styles.controls}>
-                <TouchableOpacity onPress={skipToPrevious}>
-                    <Icon name="play-skip-back" size={40} color="#000" />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={togglePlayback}>
-                    <Icon
-                        name={isPlayerReady ? 'pause-circle' : 'play-circle'}
-                        size={60}
-                        color="#000"
-                    />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={skipToNext}>
-                    <Icon name="play-skip-forward" size={40} color="#000" />
-                </TouchableOpacity>
-            </View>
-        </View>
+                <View style={styles.controls}>
+                    <TouchableOpacity onPress={skipToPrevious}>
+                        <Icon name="play-skip-back" size={40} color="#000" />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={togglePlayback}>
+                        <Icon
+                            name={isPlayerReady ? 'pause-circle' : 'play-circle'}
+                            size={60}
+                            color="#000"
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={skipToNext}>
+                        <Icon name="play-skip-forward" size={40} color="#000" />
+                    </TouchableOpacity>
+                </View>
+        </SafeAreaView>
     );
 };
 
@@ -127,8 +127,9 @@ const styles = StyleSheet.create({
     },
     artwork: {
         width: 300,
-        height: 300,
-        marginBottom: 20,
+        height: 250,
+        marginBottom: 10,
+        marginTop:10,
     },
     title: {
         fontSize: 24,
@@ -141,7 +142,7 @@ const styles = StyleSheet.create({
     progress: {
         width: 300,
         height: 40,
-        marginTop: 25,
+        marginTop: 10,
     },
     progressTime: {
         display: 'flex',
@@ -153,8 +154,8 @@ const styles = StyleSheet.create({
     controls: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        width: '60%',
-        marginTop: 30,
+        width: '80%',
+        marginTop: 10,
     },
 });
 
