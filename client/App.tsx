@@ -19,12 +19,48 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import PlayerProvider from './src/store/trackPlayerContext';
 import FloadPlayer from './src/components/FloadPlayer';
 import { StyleSheet, View } from 'react-native';
-
+import TrackPlayer, { Capability} from 'react-native-track-player';
 
 
 const Tab = createBottomTabNavigator();
 enableScreens();
 const App = () => {
+  React.useEffect(() => {
+    const setupPlayer = async () => {
+      try {
+        // Setup the player
+        await TrackPlayer.setupPlayer();
+        // Update options for the player (e.g., notifications, capabilities)
+        await TrackPlayer.updateOptions({
+          capabilities: [
+            Capability.Play,
+            Capability.Pause,
+            Capability.SkipToNext,
+            Capability.SkipToPrevious,
+            Capability.Stop,
+          ],
+          notificationCapabilities: [
+            Capability.Play,
+            Capability.Pause,
+            Capability.SkipToNext,
+            Capability.SkipToPrevious,
+            Capability.Stop,
+          ],
+          compactCapabilities: [
+            Capability.Play,
+            Capability.Pause,
+            Capability.SkipToNext,
+            Capability.SkipToPrevious,
+            Capability.Stop,
+          ],
+        });
+      } catch (error) {
+        console.error('Error setting up TrackPlayer:', error);
+      }
+    };
+
+    setupPlayer();
+  }, []);
 
   return (
     <NavigationContainer>
@@ -33,12 +69,12 @@ const App = () => {
           <Tab.Navigator screenOptions={{
             headerShown: false,
           }}
-            tabBar={(props) => (
+           tabBar={(props) => (
               <View>
                 <FloadPlayer />
                 <BottomTabBar {...props} />
               </View>
-            )}>
+            )} >
             <Tab.Screen name="Home" component={HomeScreen} options={{
               tabBarIcon: () => (
                 <Icon name="home" size={25} color="#000" />

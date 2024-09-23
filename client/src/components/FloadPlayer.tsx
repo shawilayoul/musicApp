@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { usePlayerContext } from '../store/trackPlayerContext';
 import TrackPlayer, { State } from 'react-native-track-player';
@@ -6,9 +6,30 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 
 const FloadPlayer = () => {
+
+
   const [isPlayerReady, setIsPlayerReady] = useState(false);
   const { track } = usePlayerContext();
-  //console.log(track?.id)
+
+  useEffect(() => {
+    const setUpTrack = async () => {
+      await TrackPlayer.reset();
+      await TrackPlayer.add({
+        id: track?.id,
+        url: track?.url,
+        title: track?.title,
+        artist: track?.artist,
+        artwork: track?.artwork,
+      });
+      await TrackPlayer.play();
+    };
+    setUpTrack();
+
+    return () => {
+      TrackPlayer.stop();
+    };
+  }, [track?.artist, track?.artwork, track?.id, track?.title, track?.url]);
+
   // Function to toggle play/pause
   const togglePlayback = async () => {
     const currentState = (await TrackPlayer.getPlaybackState()).state;

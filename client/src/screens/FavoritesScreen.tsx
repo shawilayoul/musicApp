@@ -1,9 +1,11 @@
 import React from 'react';
-import {  View } from 'react-native';
-import { Text } from 'react-native';
+import { FlatList, View } from 'react-native';
+//import { Text } from 'react-native';
+import tracks2 from '../assests/data/track';
+import TrackPlayerList from '../components/TrackPlayerList';
 const FavoritesScreen = () => {
     return (
-        <View><Text>favorite</Text></View>
+        <View><View><FlatList data={tracks2} renderItem={({ item }) => < TrackPlayerList item={item} />} /></View></View>
     );
 };
 

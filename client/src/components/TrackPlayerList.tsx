@@ -1,13 +1,29 @@
-import React from 'react';
+import React, { useEffect} from 'react';
 import { Image, Text, View, StyleSheet, Pressable } from 'react-native';
 import { Track } from '../assests/data/track';
 import { usePlayerContext } from '../store/trackPlayerContext';
+import TrackPlayer from 'react-native-track-player';
+
+
 
 type TrackPlayerListType = {
     item: Track,
 };
 const TrackPlayerList = ({ item }: TrackPlayerListType) => {
     const { setTrack } = usePlayerContext();
+    useEffect(() => {
+        const setUpTrack = async () => {
+            await TrackPlayer.reset();
+            await TrackPlayer.add(item);
+            await TrackPlayer.play();
+        };
+        setUpTrack();
+
+        return () => {
+            TrackPlayer.stop();
+        };
+    }, [item]);
+
     return (
         <Pressable style={styles.container} onPress={()=>setTrack(item)}>
             <View>

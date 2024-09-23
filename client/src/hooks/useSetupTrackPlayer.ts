@@ -1,6 +1,6 @@
 import {SetStateAction, useEffect} from 'react';
-import TrackPlayer, {Capability, Event} from 'react-native-track-player';
-import tracks from '../assests/data/track';
+import TrackPlayer, {Event} from 'react-native-track-player';
+import {tracks2} from '../assests/data/track';
 
 export const useSetUpTrackPlayer = (
   updateCurrentTrackInfo: {(): Promise<void>; (): void},
@@ -12,35 +12,10 @@ export const useSetUpTrackPlayer = (
   useEffect(() => {
     const setupPlayer = async () => {
       try {
-        // Setup the player
-        await TrackPlayer.setupPlayer();
-        // Update options for the player (e.g., notifications, capabilities)
-        await TrackPlayer.updateOptions({
-          capabilities: [
-            Capability.Play,
-            Capability.Pause,
-            Capability.SkipToNext,
-            Capability.SkipToPrevious,
-            Capability.Stop,
-          ],
-          notificationCapabilities: [
-            Capability.Play,
-            Capability.Pause,
-            Capability.SkipToNext,
-            Capability.SkipToPrevious,
-            Capability.Stop,
-          ],
-          compactCapabilities: [
-            Capability.Play,
-            Capability.Pause,
-            Capability.SkipToNext,
-            Capability.SkipToPrevious,
-            Capability.Stop,
-          ],
-        });
-
+        // clean up the previous track
+         await TrackPlayer.reset();
         // Add a track to the player queue
-        await TrackPlayer.add(tracks);
+        await TrackPlayer.add(tracks2);
 
         // Play the first track automatically
         //await TrackPlayer.play();
