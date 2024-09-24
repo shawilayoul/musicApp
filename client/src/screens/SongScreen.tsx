@@ -1,11 +1,16 @@
 import React from 'react';
-import { FlatList, View } from 'react-native';
-import TrackPlayerList from '../components/TrackPlayerList';
+import { View } from 'react-native';
 import tracks from '../assests/data/track';
+import TrackList from '../components/TrackList';
 
 const SongsScreen = () => {
+ const Search = 'songs';
+
+    const trackListId = (trackListName: string, search?: string) => {
+        return `${trackListName} ${`- ${search} || '' `}`;
+    };
     return (
-        <View><FlatList data={tracks} renderItem={({ item }) => < TrackPlayerList item={item} />} /></View>
+        <View><TrackList id={trackListId('songs', Search)} tracks={tracks} /></View>
     );
 };
 

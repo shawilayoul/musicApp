@@ -19,7 +19,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import PlayerProvider from './src/store/trackPlayerContext';
 import FloadPlayer from './src/components/FloadPlayer';
 import { StyleSheet, View } from 'react-native';
-import TrackPlayer, { Capability} from 'react-native-track-player';
+import TrackPlayer, { Capability, RatingType, RepeatMode } from 'react-native-track-player';
+import MusicPlayer from './src/components/MusicPlayer';
 
 
 const Tab = createBottomTabNavigator();
@@ -29,9 +30,12 @@ const App = () => {
     const setupPlayer = async () => {
       try {
         // Setup the player
-        await TrackPlayer.setupPlayer();
+        await TrackPlayer.setupPlayer({
+          maxCacheSize: 1024 * 10,
+        });
         // Update options for the player (e.g., notifications, capabilities)
         await TrackPlayer.updateOptions({
+          ratingType: RatingType.Heart,
           capabilities: [
             Capability.Play,
             Capability.Pause,
@@ -54,6 +58,9 @@ const App = () => {
             Capability.Stop,
           ],
         });
+
+        await TrackPlayer.setVolume(0.5);
+        await TrackPlayer.setRepeatMode(RepeatMode.Queue);
       } catch (error) {
         console.error('Error setting up TrackPlayer:', error);
       }
@@ -66,36 +73,41 @@ const App = () => {
     <NavigationContainer>
       <PlayerProvider>
         <View style={styles.container}>
-          <Tab.Navigator screenOptions={{
-            headerShown: false,
-          }}
-           tabBar={(props) => (
-              <View>
-                <FloadPlayer />
-                <BottomTabBar {...props} />
-              </View>
-            )} >
-            <Tab.Screen name="Home" component={HomeScreen} options={{
-              tabBarIcon: () => (
-                <Icon name="home" size={25} color="#000" />
-              ),
-            }} />
-            <Tab.Screen name="Songs" component={SongsScreen} options={{
-              tabBarIcon: () => (
-                <Icon name="musical-note" size={25} color="#000" />
-              ),
-            }} />
-            <Tab.Screen name="Favorites" component={FavoritesScreen} options={{
-              tabBarIcon: () => (
-                <Icon name="heart" size={25} color="#000" />
-              ),
-            }} />
-            <Tab.Screen name="PlayList" component={PlayListScreen} options={{
-              tabBarIcon: () => (
-                <Icon name="musical-notes" size={25} color="#000" />
-              ),
-            }} />
-          </Tab.Navigator>
+            <Tab.Navigator screenOptions={{
+              headerShown: false,
+            }}
+              tabBar={(props) => (
+                <View>
+                  <FloadPlayer />
+                  <BottomTabBar {...props} />
+                </View>
+              )} >
+              <Tab.Screen name="Home" component={HomeScreen} options={{
+                tabBarIcon: () => (
+                  <Icon name="home" size={25} color="#000" />
+                ),
+              }} />
+              <Tab.Screen name="Songs" component={SongsScreen} options={{
+                tabBarIcon: () => (
+                  <Icon name="musical-note" size={25} color="#000" />
+                ),
+              }} />
+              <Tab.Screen name="Favorites" component={FavoritesScreen} options={{
+                tabBarIcon: () => (
+                  <Icon name="heart" size={25} color="#000" />
+                ),
+              }} />
+              <Tab.Screen name="PlayList" component={PlayListScreen} options={{
+                tabBarIcon: () => (
+                  <Icon name="musical-notes" size={25} color="#000" />
+                ),
+              }} />
+              <Tab.Screen name="MusicPlayer" component={MusicPlayer} options={{
+                tabBarIcon: () => (
+                  <Icon name="musical-notes" size={25} color="#000" />
+                ),
+              }} />
+            </Tab.Navigator>
         </View>
       </PlayerProvider>
     </NavigationContainer>

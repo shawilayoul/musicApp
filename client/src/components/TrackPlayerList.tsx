@@ -1,37 +1,23 @@
-import React, { useEffect} from 'react';
+import React from 'react';
 import { Image, Text, View, StyleSheet, Pressable } from 'react-native';
 import { Track } from '../assests/data/track';
-import { usePlayerContext } from '../store/trackPlayerContext';
-import TrackPlayer from 'react-native-track-player';
-
-
+//import { usePlayerContext } from '../store/trackPlayerContext';
+//import { Track } from 'react-native-track-player';
 
 type TrackPlayerListType = {
-    item: Track,
+    track: Track,
+    selectedTrack: (track: Track) => void;
 };
-const TrackPlayerList = ({ item }: TrackPlayerListType) => {
-    const { setTrack } = usePlayerContext();
-    useEffect(() => {
-        const setUpTrack = async () => {
-            await TrackPlayer.reset();
-            await TrackPlayer.add(item);
-            await TrackPlayer.play();
-        };
-        setUpTrack();
-
-        return () => {
-            TrackPlayer.stop();
-        };
-    }, [item]);
-
+const TrackPlayerList = ({ track, selectedTrack}: TrackPlayerListType) => {
+    //const { setTrack } = usePlayerContext();
     return (
-        <Pressable style={styles.container} onPress={()=>setTrack(item)}>
+        <Pressable style={styles.container} onPress={() => selectedTrack(track)}>
             <View>
-                <Image source={{ uri: item.artwork }} style={styles.image} />
+                <Image source={{ uri: track?.artwork ?? 'https://images.unsplash.com/photo-1542379653-b928db1b4956?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }} style={styles.image} />
             </View>
             <View>
-                <Text style={styles.title}>{item.title}</Text>
-                <Text>{item.artist}</Text>
+                <Text style={styles.title}>{track?.title ?? ''}</Text>
+                <Text>{track?.artist ?? ''}</Text>
             </View>
         </Pressable>
     );
