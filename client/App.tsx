@@ -19,11 +19,11 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import PlayerProvider from './src/store/trackPlayerContext';
 import FloadPlayer from './src/components/FloadPlayer';
 import { StyleSheet, View } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import TrackPlayer, { Capability, RatingType, RepeatMode } from 'react-native-track-player';
-import MusicPlayer from './src/components/MusicPlayer';
-
 
 const Tab = createBottomTabNavigator();
+
 enableScreens();
 const App = () => {
   React.useEffect(() => {
@@ -59,7 +59,7 @@ const App = () => {
           ],
         });
 
-        await TrackPlayer.setVolume(0.5);
+        //await TrackPlayer.setVolume(0.5);
         await TrackPlayer.setRepeatMode(RepeatMode.Queue);
       } catch (error) {
         console.error('Error setting up TrackPlayer:', error);
@@ -70,9 +70,9 @@ const App = () => {
   }, []);
 
   return (
-    <NavigationContainer>
-      <PlayerProvider>
-        <View style={styles.container}>
+      <NavigationContainer>
+        <PlayerProvider>
+          <View style={styles.container}>
             <Tab.Navigator screenOptions={{
               headerShown: false,
             }}
@@ -89,7 +89,7 @@ const App = () => {
               }} />
               <Tab.Screen name="Songs" component={SongsScreen} options={{
                 tabBarIcon: () => (
-                  <Icon name="musical-note" size={25} color="#000" />
+                  <Icon name="musical-notes" size={25} color="#000" />
                 ),
               }} />
               <Tab.Screen name="Favorites" component={FavoritesScreen} options={{
@@ -99,18 +99,13 @@ const App = () => {
               }} />
               <Tab.Screen name="PlayList" component={PlayListScreen} options={{
                 tabBarIcon: () => (
-                  <Icon name="musical-notes" size={25} color="#000" />
-                ),
-              }} />
-              <Tab.Screen name="MusicPlayer" component={MusicPlayer} options={{
-                tabBarIcon: () => (
-                  <Icon name="musical-notes" size={25} color="#000" />
+                  <MaterialCommunityIcons name="playlist-music" size={25} color="#000" />
                 ),
               }} />
             </Tab.Navigator>
-        </View>
-      </PlayerProvider>
-    </NavigationContainer>
+          </View>
+        </PlayerProvider>
+      </NavigationContainer>
   );
 };
 

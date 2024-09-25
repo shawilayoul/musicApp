@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { FlatList, FlatListProps } from 'react-native';
-import TrackPlayerList from './TrackPlayerList';
+import TrackListItems from './TrackListItems';
 import TrackPlayer from 'react-native-track-player';
 import { usePlayerContext } from '../store/trackPlayerContext';
 import { Track } from '../assests/data/track';
@@ -11,6 +11,7 @@ export type TrackListType = Partial<FlatListProps<Track>> & {
 }
 
 const TrackList = ({ id, tracks }: TrackListType) => {
+
     const queueOffset = useRef(0);
     const { activeQueueId, setActiveQueuedId } = usePlayerContext();
 
@@ -41,11 +42,12 @@ const TrackList = ({ id, tracks }: TrackListType) => {
                 : trackIndex - queueOffset.current;
             await TrackPlayer.skip(nextTrackIndex);
             await TrackPlayer.play();
+
         }
     };
 
     return (
-        <FlatList data={tracks} renderItem={({ item: track }) => (<TrackPlayerList track={track} selectedTrack={handleTrack} />)} />
+        <FlatList data={tracks} renderItem={({ item: track }) => (<TrackListItems track={track} selectedTrack={handleTrack} />)} />
     );
 };
 
