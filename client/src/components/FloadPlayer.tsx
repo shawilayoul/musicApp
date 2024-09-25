@@ -1,13 +1,15 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Pressable } from 'react-native';
 import TrackPlayer, { useActiveTrack, useIsPlaying } from 'react-native-track-player';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { imageUrl } from '../assests/data/track';
 
 
 const FloadPlayer = () => {
   const activeTrack = useActiveTrack();
   const { playing } = useIsPlaying();
-
+  const navigation = useNavigation();
   const skipToNext = async () => {
     try {
       await TrackPlayer.skipToNext();
@@ -19,12 +21,12 @@ const FloadPlayer = () => {
   if (!activeTrack) { return null; }
 
   return (
-    <Pressable style={styles.container} >
+    <Pressable style={styles.container} onPress={() => navigation.navigate('StackNavigation', { screen: 'MusicPlayer' })}>
       <View>
-        <Image source={{ uri: activeTrack.artwork ?? 'https://images.unsplash.com/photo-1542379653-b928db1b4956?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }} style={styles.image} />
+        <Image source={{ uri: activeTrack.artwork ?? imageUrl }} style={styles.image} />
       </View>
       <View>
-        <Text style={playing ? { color: 'red' } : { color: '#000' }}>{activeTrack?.title ?? ''}</Text>
+        <Text style={playing ? { color: 'red' } : { color: '#0a2472' }}>{activeTrack?.title ?? ''}</Text>
         <Text>{activeTrack?.artist ?? ''}</Text>
       </View>
       <View style={styles.playIcon}>
@@ -32,11 +34,11 @@ const FloadPlayer = () => {
           <Icon
             name={playing ? 'pause-circle' : 'play-circle'}
             size={60}
-            color="#000"
+            color="#0a2472"
           />
         </TouchableOpacity>
         <TouchableOpacity onPress={skipToNext}>
-          <Icon name="play-skip-forward" size={40} color="#000" />
+          <Icon name="play-skip-forward" size={40} color="#0a2472" />
         </TouchableOpacity>
       </View>
     </Pressable>

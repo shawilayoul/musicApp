@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Image, Text, View, StyleSheet, Pressable } from 'react-native';
-import { Track } from '../assests/data/track';
+import { imageUrl, Track } from '../assests/data/track';
 import TrackPlayer, { Event, useTrackPlayerEvents } from 'react-native-track-player';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -21,13 +21,9 @@ const TrackListItems = ({ track, selectedTrack }: TrackPlayerListType) => {
     return (
         <Pressable style={styles.container} onPress={() => selectedTrack(track)}>
             <View>
-                <Image source={{ uri: track?.artwork ?? 'https://images.unsplash.com/photo-1542379653-b928db1b4956?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80' }} style={styles.image} />
+                <Image source={{ uri: track?.artwork ?? imageUrl }} style={styles.image} />
                 <View style={styles.loaderKitContainer}>
-                    {isPlaying ? <Icon
-                        style={styles.loaderKit}
-                        name="pause"
-                        color={'red'}
-                    /> : <Icon name="play" size={24} style={styles.playIcon} />}
+                    {isPlaying ? <Icon  name="pause" color="red" size={26} style={styles.loaderKit}/> : <Icon name="play" size={24} style={styles.playIcon} />}
                 </View>
 
             </View>
@@ -63,13 +59,14 @@ const styles = StyleSheet.create({
         fontWeight: '600',
     },
     loaderKit: {
-        width: 30,
-        height: 30,
+        position: 'absolute',
+        left: 6,
+        top: 2,
     },
-    playIcon:{
-        position:'absolute',
-        left:8,
-        color:'#1282a2',
+    playIcon: {
+        position: 'absolute',
+        left: 8,
+        color: '#1282a2',
     },
     loaderKitContainer: {
         position: 'absolute',
