@@ -42,7 +42,7 @@ const App = () => {
             Capability.SkipToNext,
             Capability.SkipToPrevious,
             Capability.Stop,
-          ],
+          ],/*
           notificationCapabilities: [
             Capability.Play,
             Capability.Pause,
@@ -56,7 +56,7 @@ const App = () => {
             Capability.SkipToNext,
             Capability.SkipToPrevious,
             Capability.Stop,
-          ],
+          ],*/
         });
 
         //await TrackPlayer.setVolume(0.5);
@@ -74,7 +74,6 @@ const App = () => {
         <PlayerProvider>
           <View style={styles.container}>
             <Tab.Navigator screenOptions={{
-              headerShown: false,
             }}
               tabBar={(props) => (
                 <View>

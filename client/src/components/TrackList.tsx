@@ -6,16 +6,16 @@ import { usePlayerContext } from '../store/trackPlayerContext';
 import { Track } from '../assests/data/track';
 
 export type TrackListType = Partial<FlatListProps<Track>> & {
-    id: string,
     tracks: Track[],
 }
 
-const TrackList = ({ id, tracks }: TrackListType) => {
+const TrackList = ({ tracks }: TrackListType) => {
 
     const queueOffset = useRef(0);
     const { activeQueueId, setActiveQueuedId } = usePlayerContext();
 
     const handleTrack = async (selectedTrack: Track) => {
+        const id = 'shawil';
 
         const trackIndex = tracks.findIndex((track) => track.url === selectedTrack.url);
         if (trackIndex === -1) { return; }
