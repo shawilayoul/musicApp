@@ -5,7 +5,6 @@ import TrackPlayer, { useActiveTrack, useIsPlaying } from 'react-native-track-pl
 import Icon from 'react-native-vector-icons/Ionicons';
 import { imageUrl } from '../assests/data/track';
 
-
 const FloadPlayer = () => {
   const activeTrack = useActiveTrack();
   const { playing } = useIsPlaying();
@@ -53,7 +52,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '95%',
     padding: 5,
-    backgroundColor: 'lightgray',
+    backgroundColor: 'lightblue',
     margin: 5,
     borderEndEndRadius: 5,
     cursor: 'pointer',

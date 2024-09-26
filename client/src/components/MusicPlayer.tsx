@@ -7,17 +7,15 @@
 /**/
 
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, SafeAreaView, Button } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, SafeAreaView } from 'react-native';
 import Slider from '@react-native-community/slider';
 import TrackPlayer, { State, useProgress, useActiveTrack, useIsPlaying } from 'react-native-track-player';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { imageUrl } from '../assests/data/track';
-import { useNavigation } from '@react-navigation/native';
 const MusicPlayer = () => {
     const progress = useProgress();
     const activeTrack = useActiveTrack();
     const { playing } = useIsPlaying();
-    const navigation = useNavigation();
 
     //formatime to display the progress par
     const formatTime = (seconds: number) => {
@@ -52,10 +50,6 @@ const MusicPlayer = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Button
-                title="Go to songs List"
-                onPress={() => navigation.navigate('songs')}
-            />
             <Image source={{ uri: activeTrack?.artwork ?? imageUrl }} style={styles.artwork} />
             <Text style={styles.title}>{activeTrack?.title ?? ''} </Text>
             <Text style={styles.artist}>{activeTrack?.artist ?? 'unknow artist'} </Text>
@@ -115,22 +109,21 @@ const styles = StyleSheet.create({
         color: '#888',
     },
     progress: {
-        width: 300,
+        width: '100%',
         height: 40,
         marginTop: 10,
-        color: 'blue',
     },
     progressTime: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        width: '80%',
+        width: '90%',
         alignItems: 'center',
     },
     controls: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        width: '80%',
+        width: '90%',
         marginTop: 10,
     },
 });

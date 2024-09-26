@@ -8,7 +8,7 @@
 /**/
 
 import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, NavigatorScreenParams } from '@react-navigation/native';
 import { BottomTabBar, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FavoritesScreen from './src/screens/FavoritesScreen';
 import { enableScreens } from 'react-native-screens';
@@ -22,11 +22,22 @@ import { StyleSheet, View } from 'react-native';
 import StackNavigation from './src/navigations/StackNavigation';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import TrackPlayer, { Capability, RatingType, RepeatMode } from 'react-native-track-player';
+import { RootStackParamList } from './src/navigations/StackNavigation';
 
-const Tab = createBottomTabNavigator();
+// Define the Tab Navigator's parameter list
+export type TabParamList = {
+  Home: NavigatorScreenParams<RootStackParamList>;
+  songs: undefined;
+  Favorites: undefined;
+  PlayList: undefined;
+  StackNavigation:undefined;
+};
+
+const Tab = createBottomTabNavigator<TabParamList>();
 
 enableScreens();
 const App = () => {
+  const [isFloatingPlayerVisible, setIsFloatingPlayerVisible] = React.useState(true);
   React.useEffect(() => {
     const setupPlayer = async () => {
       try {
@@ -70,6 +81,9 @@ const App = () => {
     setupPlayer();
   }, []);
 
+  const toggleFloatingPlayerVisibility = (visible: boolean | ((prevState: boolean) => boolean)) => {
+    setIsFloatingPlayerVisible(visible);
+  };
   return (
     <NavigationContainer>
       <PlayerProvider>
@@ -78,7 +92,7 @@ const App = () => {
           }}
             tabBar={(props) => (
               <View>
-                <FloadPlayer />
+                {isFloatingPlayerVisible && <FloadPlayer />}
                 <BottomTabBar {...props} />
               </View>
             )} >
@@ -102,10 +116,11 @@ const App = () => {
                 <MaterialCommunityIcons name="playlist-music" size={25} color="#0a2472" />
               ),
             }} />
-            <Tab.Screen name="StackNavigation" component={StackNavigation} options={{
+              <Tab.Screen name="StackNavigation" options={{
               headerShown: false, tabBarButton: () => null,  // This hides the tab icon
-              tabBarStyle: { display: 'none' },
-            }} />
+            }}>
+                {() => <StackNavigation toggleFloatingPlayerVisibility={toggleFloatingPlayerVisibility} />}
+              </Tab.Screen>
           </Tab.Navigator>
         </View>
       </PlayerProvider>

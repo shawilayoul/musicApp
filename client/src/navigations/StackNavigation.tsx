@@ -1,18 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import FloadPlayer from '../components/FloadPlayer';
 import MusicPlayer from '../components/MusicPlayer';
+import { useIsFocused } from '@react-navigation/native';
 
-type RootStackParamList = {
+export type RootStackParamList = {
     FloadPlayer: undefined;
-    MusicPlayer: {
-        screen: string;
-    };
+    MusicPlayer: undefined;
 };
 
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
-const StackNavigation = () => {
+
+// Define types for PlayerStack props
+interface PlayerStackProps {
+    toggleFloatingPlayerVisibility: (isVisible: boolean) => void;
+}
+const StackNavigation: React.FC<PlayerStackProps> = ({ toggleFloatingPlayerVisibility }) => {
+    const isFoucused = useIsFocused();
+    useEffect(() => {
+        toggleFloatingPlayerVisibility(!isFoucused);
+    }, [isFoucused, toggleFloatingPlayerVisibility]);
     return (
         <Stack.Navigator screenOptions={{
             headerShadowVisible: false,
