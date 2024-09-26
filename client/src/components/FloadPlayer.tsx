@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, Pressable } from 'reac
 import TrackPlayer, { useActiveTrack, useIsPlaying } from 'react-native-track-player';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { imageUrl } from '../assests/data/track';
+import { Colors } from '../constants/colors';
 
 const FloadPlayer = () => {
   const activeTrack = useActiveTrack();
@@ -21,23 +22,23 @@ const FloadPlayer = () => {
 
   return (
     <Pressable style={styles.container} onPress={() => navigation.navigate('StackNavigation', { screen: 'MusicPlayer' })}>
-      <View>
+      <View style={styles.imageContainer}>
         <Image source={{ uri: activeTrack.artwork ?? imageUrl }} style={styles.image} />
       </View>
       <View>
-        <Text style={playing ? { color: 'red' } : { color: '#0a2472' }}>{activeTrack?.title ?? ''}</Text>
+        <Text style={playing ? { color: Colors.activeTitle } : { color: Colors.title }}>{activeTrack?.title ?? ''}</Text>
         <Text>{activeTrack?.artist ?? ''}</Text>
       </View>
-      <View style={styles.playIcon}>
+      <View style={styles.playIconContainer}>
         <TouchableOpacity onPress={() => playing ? TrackPlayer.pause() : TrackPlayer.play()}>
           <Icon
             name={playing ? 'pause-circle' : 'play-circle'}
             size={60}
-            color="#0a2472"
+            color={Colors.icon}
           />
         </TouchableOpacity>
         <TouchableOpacity onPress={skipToNext}>
-          <Icon name="play-skip-forward" size={40} color="#0a2472" />
+          <Icon name="play-skip-forward" size={40} color={Colors.icon} />
         </TouchableOpacity>
       </View>
     </Pressable>
@@ -53,24 +54,27 @@ const styles = StyleSheet.create({
     width: '95%',
     padding: 5,
     backgroundColor: 'lightblue',
-    margin: 5,
-    borderEndEndRadius: 5,
+    margin: 'auto',
+    borderRadius: 10,
     cursor: 'pointer',
     zIndex: 10,
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  imageContainer: {
+    marginLeft: 20,
+  },
   image: {
-    width: 50,
+    width: 55,
     aspectRatio: 1,
-    borderRadius: 5,
-    marginRight: 10,
+    borderRadius: 50,
   },
   title: {
-    color: '#000',
-    fontWeight: '600',
+    color: Colors.title,
+    fontSize: 24,
+    fontWeight: 'bold',
   },
-  playIcon: {
+  playIconContainer: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',

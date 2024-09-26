@@ -12,6 +12,7 @@ import Slider from '@react-native-community/slider';
 import TrackPlayer, { State, useProgress, useActiveTrack, useIsPlaying } from 'react-native-track-player';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { imageUrl } from '../assests/data/track';
+import { Colors } from '../constants/colors';
 const MusicPlayer = () => {
     const progress = useProgress();
     const activeTrack = useActiveTrack();
@@ -51,7 +52,7 @@ const MusicPlayer = () => {
     return (
         <SafeAreaView style={styles.container}>
             <Image source={{ uri: activeTrack?.artwork ?? imageUrl }} style={styles.artwork} />
-            <Text style={styles.title}>{activeTrack?.title ?? ''} </Text>
+            <Text style={{ ...styles.title, color: playing ? Colors.activeTitle : Colors.title }}>{activeTrack?.title ?? ''} </Text>
             <Text style={styles.artist}>{activeTrack?.artist ?? 'unknow artist'} </Text>
             <Slider
                 style={styles.progress}
@@ -63,23 +64,23 @@ const MusicPlayer = () => {
                 }}
             />
             <View style={styles.progressTime}>
-                <Text>{formatTime(progress.position)}</Text>
-                <Text>{formatTime(progress.duration - progress.position)}</Text>
+                <Text style={{ color: Colors.title }}>{formatTime(progress.position)}</Text>
+                <Text style={{ color: Colors.title }}>{formatTime(progress.duration - progress.position)}</Text>
             </View>
 
             <View style={styles.controls}>
                 <TouchableOpacity onPress={skipToPrevious}>
-                    <Icon name="play-skip-back" size={40} color="#0a2472" />
+                    <Icon name="play-skip-back" size={40} color={Colors.icon} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={togglePlayback}>
                     <Icon
                         name={playing ? 'pause-circle' : 'play-circle'}
                         size={60}
-                        color="#0a2472"
+                        color={Colors.icon}
                     />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={skipToNext}>
-                    <Icon name="play-skip-forward" size={40} color="#0a2472" />
+                    <Icon name="play-skip-forward" size={40} color={Colors.icon} />
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -103,10 +104,11 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 24,
         fontWeight: 'bold',
+        color: Colors.title,
     },
     artist: {
         fontSize: 18,
-        color: '#888',
+        color: Colors.subTitle,
     },
     progress: {
         width: '100%',

@@ -1,9 +1,10 @@
 import React, { useRef } from 'react';
-import { FlatList, FlatListProps } from 'react-native';
+import { FlatList, FlatListProps, Text } from 'react-native';
 import TrackListItems from './TrackListItems';
 import TrackPlayer from 'react-native-track-player';
 import { usePlayerContext } from '../store/trackPlayerContext';
 import { Track } from '../assests/data/track';
+import { View } from 'react-native';
 
 export type TrackListType = Partial<FlatListProps<Track>> & {
     tracks: Track[],
@@ -47,7 +48,15 @@ const TrackList = ({ tracks }: TrackListType) => {
     };
 
     return (
-        <FlatList data={tracks} renderItem={({ item: track }) => (<TrackListItems track={track} selectedTrack={handleTrack} />)} />
+        <FlatList ListEmptyComponent={
+            <View>
+                <Text>No Songs Found</Text>
+            </View>
+        }
+            showsVerticalScrollIndicator={false}
+            data={tracks}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item: track }) => (<TrackListItems track={track} selectedTrack={handleTrack} />)} />
     );
 };
 

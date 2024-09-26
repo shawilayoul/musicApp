@@ -3,6 +3,7 @@ import { Image, Text, View, StyleSheet, Pressable } from 'react-native';
 import { imageUrl, Track } from '../assests/data/track';
 import TrackPlayer, { Event, useTrackPlayerEvents } from 'react-native-track-player';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { Colors } from '../constants/colors';
 
 type TrackPlayerListType = {
     track: Track,
@@ -20,16 +21,19 @@ const TrackListItems = ({ track, selectedTrack }: TrackPlayerListType) => {
     const isPlaying = currentTrackId === track.id;
     return (
         <Pressable style={styles.container} onPress={() => selectedTrack(track)}>
-            <View>
+            <View style={styles.left}>
+                <Text>{track.id}</Text>
                 <Image source={{ uri: track?.artwork ?? imageUrl }} style={styles.image} />
-                <View style={styles.loaderKitContainer}>
-                    {isPlaying ? <Icon  name="pause" color="red" size={26} style={styles.loaderKit}/> : <Icon name="play" size={24} style={styles.playIcon} />}
-                </View>
 
+                <View>
+                    <Text style={(currentTrackId === track.id) ? { color: Colors.activeTitle } : { color: Colors.title }}>{track?.title ?? ''}</Text>
+                    <Text>{track?.artist ?? ''}</Text>
+                </View>
             </View>
             <View>
-                <Text style={(currentTrackId === track.id) ? { color: 'red' } : { color: '#000' }}>{track?.title ?? ''}</Text>
-                <Text>{track?.artist ?? ''}</Text>
+                <View>
+                    {isPlaying ? <Icon name="pause" color={Colors.activeTitle} size={26}/> : <Icon name="play" size={24} style={styles.playIcon} />}
+                </View>
             </View>
         </Pressable>
     );
@@ -41,12 +45,20 @@ const styles = StyleSheet.create({
     container: {
         display: 'flex',
         flexDirection: 'row',
+        justifyContent:'space-between',
+        alignItems:'center',
         width: '95%',
+        marginVertical:5,
         padding: 5,
         backgroundColor: '#ffff',
-        margin: 5,
-        borderEndEndRadius: 5,
-        cursor: 'pointer',
+        borderRadius: 10,
+        margin:'auto',
+    },
+    left: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
     },
     image: {
         width: 50,
@@ -55,22 +67,12 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     title: {
-        color: '#000',
-        fontWeight: '600',
-    },
-    loaderKit: {
-        position: 'absolute',
-        left: 6,
-        top: 2,
+        color: Colors.title,
+        fontSize: 24,
+        fontWeight: 'bold',
     },
     playIcon: {
-        position: 'absolute',
-        left: 8,
-        color: '#1282a2',
-    },
-    loaderKitContainer: {
-        position: 'absolute',
-        left: 10,
-        top: 10,
+        color: Colors.icon,
+        fontSize: 25,
     },
 });

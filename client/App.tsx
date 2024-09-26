@@ -102,6 +102,7 @@ const App = () => {
               ),
             }} />
             <Tab.Screen name="songs" component={SongsScreen} options={{
+              headerTitle:'Songs',
               tabBarIcon: () => (
                 <Icon name="musical-notes" size={25} color="#0a2472" />
               ),
