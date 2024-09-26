@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, TextInput, View } from 'react-native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
 import tracks, { Track } from '../assests/data/track';
 import TrackList from '../components/TrackList';
 import { Colors } from '../constants/colors';
+import { Searchbar } from 'react-native-paper';
 const FavoritesScreen = () => {
     const [searchText, setSearchText] = useState('');
     const [filteredTracks, setFilteredTracks] = useState<Track[]>([]);
+
+    const onChangeSearch = (text: React.SetStateAction<string>) => setSearchText(text);
 
     useEffect(() => {
         if (!searchText) { setFilteredTracks(tracks); }
@@ -17,7 +20,14 @@ const FavoritesScreen = () => {
     return (
         <SafeAreaView>
             <View>
-                <TextInput placeholder="search by song title...." style={styles.search} onChangeText={(text) => setSearchText(text)} />
+                <View style={styles.container}>
+                    <Searchbar
+                        placeholder="search by song title ...."
+                        value={searchText}
+                        style={styles.searchBar}
+                        onChangeText={onChangeSearch}
+                    />
+                </View>
             </View>
             <View><View><TrackList tracks={filteredTracks} /></View></View>
         </SafeAreaView>
@@ -25,12 +35,12 @@ const FavoritesScreen = () => {
 };
 
 const styles = StyleSheet.create({
-    search: {
-        padding: 5,
-        margin: 10,
-        borderColor: Colors.icon,
-        borderWidth: 2,
-        borderRadius: 5,
+    container: {
+        padding: 10,
+    },
+    searchBar: {
+        borderRadius: 10,
+        backgroundColor: Colors.lightblue,
     },
 });
 export default FavoritesScreen;

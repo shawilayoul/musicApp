@@ -3,4 +3,5 @@ export const Colors = {
  subTitle:'#14213d',
  icon:'#0a2472',
  activeTitle:'red',
+ lightblue:'lightblue',
 };

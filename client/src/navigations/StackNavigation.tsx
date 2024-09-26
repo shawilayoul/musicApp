@@ -22,12 +22,15 @@ const StackNavigation: React.FC<PlayerStackProps> = ({ toggleFloatingPlayerVisib
         toggleFloatingPlayerVisibility(!isFoucused);
     }, [isFoucused, toggleFloatingPlayerVisibility]);
     return (
-        <Stack.Navigator screenOptions={{
-            headerShadowVisible: false,
-        }}>
+        <Stack.Navigator
+            screenOptions={{
+                headerShadowVisible: false,
+                animation: 'fade', // Fade in/out between screens
+                animationTypeForReplace: 'push',
+            }} >
             <Stack.Screen name="FloadPlayer" component={FloadPlayer} options={{ headerShown: false }} />
             <Stack.Screen name="MusicPlayer" component={MusicPlayer} options={{ headerShown: false }} />
-        </Stack.Navigator>
+        </Stack.Navigator >
     );
 };
 
