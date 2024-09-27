@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { FlatList, FlatListProps, Text } from 'react-native';
+import { FlatList, FlatListProps, Text ,StyleSheet} from 'react-native';
 import TrackListItems from './TrackListItems';
 import TrackPlayer from 'react-native-track-player';
 import { usePlayerContext } from '../store/trackPlayerContext';
@@ -11,7 +11,6 @@ export type TrackListType = Partial<FlatListProps<Track>> & {
 }
 
 const TrackList = ({ tracks }: TrackListType) => {
-
     const queueOffset = useRef(0);
     const { activeQueueId, setActiveQueuedId } = usePlayerContext();
 
@@ -33,7 +32,6 @@ const TrackList = ({ tracks }: TrackListType) => {
             await TrackPlayer.add(beforeTrack);
 
             await TrackPlayer.play();
-
             queueOffset.current = trackIndex;
             setActiveQueuedId(id);
 
@@ -43,13 +41,12 @@ const TrackList = ({ tracks }: TrackListType) => {
                 : trackIndex - queueOffset.current;
             await TrackPlayer.skip(nextTrackIndex);
             await TrackPlayer.play();
-
         }
     };
 
     return (
         <FlatList ListEmptyComponent={
-            <View>
+            <View style={styles.notFount}>
                 <Text>No Songs Found</Text>
             </View>
         }
@@ -59,5 +56,11 @@ const TrackList = ({ tracks }: TrackListType) => {
             renderItem={({ item: track }) => (<TrackListItems track={track} selectedTrack={handleTrack} />)} />
     );
 };
+
+const styles = StyleSheet.create({
+    notFount:{
+        alignItems:'center',
+    }
+})
 
 export default TrackList;

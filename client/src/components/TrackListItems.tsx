@@ -11,6 +11,7 @@ type TrackPlayerListType = {
 };
 const TrackListItems = ({ track, selectedTrack }: TrackPlayerListType) => {
     const [currentTrackId, setCurrentTrackId] = useState(null);
+
     useTrackPlayerEvents([Event.PlaybackActiveTrackChanged], async (event) => {
         if (event.index != null) {
             const trackId = await TrackPlayer.getTrack(event.index);
@@ -19,6 +20,7 @@ const TrackListItems = ({ track, selectedTrack }: TrackPlayerListType) => {
     });
 
     const isPlaying = currentTrackId === track.id;
+
     return (
         <Pressable style={styles.container} onPress={() => selectedTrack(track)}>
             <View style={styles.left}>
@@ -31,9 +33,11 @@ const TrackListItems = ({ track, selectedTrack }: TrackPlayerListType) => {
                 </View>
             </View>
             <View>
-                <View>
-                    {isPlaying ? <Icon name="pause" color={Colors.activeTitle} size={26}/> : <Icon name="play" size={24} style={styles.playIcon} />}
-                </View>
+                <Icon
+                    name={isPlaying ? 'pause' : 'play'} // Change icon based on play/pause state
+                    size={30}
+                    color={isPlaying ? Colors.activeTitle : Colors.icon} // Color based on state
+                />
             </View>
         </Pressable>
     );
@@ -45,14 +49,14 @@ const styles = StyleSheet.create({
     container: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent:'space-between',
-        alignItems:'center',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         width: '95%',
-        marginVertical:5,
+        marginVertical: 5,
         padding: 5,
         backgroundColor: '#ffff',
         borderRadius: 10,
-        margin:'auto',
+        margin: 'auto',
     },
     left: {
         display: 'flex',
