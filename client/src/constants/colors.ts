@@ -4,4 +4,5 @@ export const Colors = {
  icon:'#0a2472',
  activeTitle:'red',
  lightblue:'lightblue',
+ gray:'gray',
 };

@@ -23,6 +23,7 @@ import StackNavigation from './src/navigations/StackNavigation';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import TrackPlayer, { Capability, RatingType, RepeatMode } from 'react-native-track-player';
 import { RootStackParamList } from './src/navigations/StackNavigation';
+import { Colors } from './src/constants/colors';
 
 // Define the Tab Navigator's parameter list
 export type TabParamList = {
@@ -102,14 +103,14 @@ const App = () => {
               ),
             }} />
             <Tab.Screen name="songs" component={SongsScreen} options={{
-              headerTitle:'Songs',
+              headerTitle:'All Songs',
               tabBarIcon: () => (
                 <Icon name="musical-notes" size={25} color="#0a2472" />
               ),
             }} />
             <Tab.Screen name="Favorites" component={FavoritesScreen} options={{
               tabBarIcon: () => (
-                <Icon name="heart" size={25} color="#0a2472" />
+                <Icon name="heart" size={25} color={Colors.activeTitle} />
               ),
             }} />
             <Tab.Screen name="PlayList" component={PlayListScreen} options={{

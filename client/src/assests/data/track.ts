@@ -1,19 +1,19 @@
-//import {Track} from 'react-native-track-player';
-export type Track = {
+import {Track} from 'react-native-track-player';
+/*export type Track = {
   id: string;
   url: string; // You can specify a more specific type if you know it (e.g., string for URLs)
   title: string;
   artist: string;
   artwork: string;
-};
+};*/
 export const imageUrl =
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIN6iFDbA-lmBLINiQlt8dSO5qWkqWx003dhJXZN81Sx3HqHCq6yTSC4ZlyBzqeSoGCno&usqp=CAU';
 const tracks: Track[] = [
   {
     id: '1',
-    url: require('../songs/FJULaFOI.mp3'),
-    title: 'La FOI',
-    artist: 'FJU LYON',
+    url: require('../songs/MegaHelpe.mp3'),
+    title: 'MegaHelpe',
+    artist: 'FJU PARIS',
     artwork: imageUrl,
   },
   {
@@ -76,6 +76,13 @@ const tracks: Track[] = [
     id: '10',
     url: require('../songs/FJU-Décision.mp3'),
     title: 'Décision',
+    artist: 'FJU LYON',
+    artwork: imageUrl,
+  },
+  {
+    id: '11',
+    url: require('../songs/FJULaFOI.mp3'),
+    title: 'La FOI',
     artist: 'FJU LYON',
     artwork: imageUrl,
   },
@@ -162,6 +169,13 @@ export const tracks2: Track[] = [
     artist: 'FJU LYON',
     artwork:
       'https://images.unsplash.com/photo-1542749777-399a1d3e59de?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8c2luZ2Vyc3xlbnwwfHwwfHx8MA%3D%3D',
+  },
+  {
+    id: '11',
+    url: require('../songs/FJULaFOI.mp3'),
+    title: 'La FOI',
+    artist: 'FJU LYON',
+    artwork: imageUrl,
   },
 ];
 

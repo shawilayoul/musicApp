@@ -10,21 +10,21 @@ type TrackPlayerListType = {
     track: Track,
     selectedTrack: (track: Track) => void;
 };
-const TrackListItems = ({ track, selectedTrack }: TrackPlayerListType) => {
+const FavoritesTrackListItems = ({ track, selectedTrack }: TrackPlayerListType) => {
     const [currentTrackId, setCurrentTrackId] = useState(null);
     const { playing } = useIsPlaying();
+
     const { addFavorite, removeFavorites, isFavrite } = usePlayerContext();
     // handeling favorites fuctionalities
     const toggleFavorites = () => {
         if (!isFavrite(track?.id)) {
             addFavorite(track?.id);
         } else {
-            if (isFavrite(track?.id)){
+            if (isFavrite(track?.id)) {
                 removeFavorites(track?.id);
             }
         }
     };
-
     useTrackPlayerEvents([Event.PlaybackActiveTrackChanged], async (event) => {
         if (event.index != null) {
             const trackId = await TrackPlayer.getTrack(event.index);
@@ -47,7 +47,7 @@ const TrackListItems = ({ track, selectedTrack }: TrackPlayerListType) => {
             <View style={styles.playIcon}>
                 <Icon name="heart"
                     size={30}
-                    color={isFavrite(track?.id) ? Colors.activeTitle : Colors.gray } onPress={() => toggleFavorites()} />
+                    color={isFavrite(track?.id) ? Colors.activeTitle : Colors.gray} onPress={() => toggleFavorites()} />
                 <Icon
                     name={(isPlaying && playing) ? 'pause' : 'play'} // Change icon based on play/pause state
                     size={30}
@@ -58,7 +58,7 @@ const TrackListItems = ({ track, selectedTrack }: TrackPlayerListType) => {
     );
 };
 
-export default TrackListItems;
+export default FavoritesTrackListItems;
 
 const styles = StyleSheet.create({
     container: {
