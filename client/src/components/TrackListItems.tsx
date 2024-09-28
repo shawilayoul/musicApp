@@ -46,11 +46,11 @@ const TrackListItems = ({ track, selectedTrack }: TrackPlayerListType) => {
             </View>
             <View style={styles.playIcon}>
                 <Icon name="heart"
-                    size={30}
+                    size={25}
                     color={isFavrite(track?.id) ? Colors.activeTitle : Colors.gray } onPress={() => toggleFavorites()} />
                 <Icon
                     name={(isPlaying && playing) ? 'pause' : 'play'} // Change icon based on play/pause state
-                    size={30}
+                    size={25}
                     color={(isPlaying && playing) ? Colors.activeTitle : Colors.icon} // Color based on state
                 />
             </View>

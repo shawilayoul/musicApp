@@ -6,3 +6,22 @@ export const Colors = {
  lightblue:'lightblue',
  gray:'gray',
 };
+
+export const playlists = [
+    {
+        id:'1',
+        name:'FJU Lyon',
+    },
+    {
+        id:'2',
+        name:'FJU Paris',
+    },
+    {
+        id:'3',
+        name:'FJU Bordeux',
+    },
+    {
+        id:'4',
+        name:'FJU VileJuif',
+    },
+];

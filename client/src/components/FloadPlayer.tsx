@@ -1,4 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '../navigations/StackNavigation';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Pressable } from 'react-native';
 import TrackPlayer, { useActiveTrack, useIsPlaying } from 'react-native-track-player';
@@ -6,10 +8,14 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { imageUrl } from '../assests/data/track';
 import { Colors } from '../constants/colors';
 
-const FloadPlayer = () => {
+type FloadPlayerProp = StackNavigationProp<RootStackParamList, 'StackNavigation'>;
+
+const FloadPlayer: React.FC = () => {
   const activeTrack = useActiveTrack();
   const { playing } = useIsPlaying();
-  const navigation = useNavigation();
+  const navigation = useNavigation<FloadPlayerProp>();
+
+
   const skipToNext = async () => {
     try {
       await TrackPlayer.skipToNext();
@@ -60,7 +66,7 @@ const styles = StyleSheet.create({
     zIndex: 10,
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom:10,
+    marginBottom: 10,
   },
   imageContainer: {
     marginLeft: 20,
