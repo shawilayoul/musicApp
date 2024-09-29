@@ -5,23 +5,7 @@ export const Colors = {
  activeTitle:'red',
  lightblue:'lightblue',
  gray:'gray',
+ white:'white',
 };
 
-export const playlists = [
-    {
-        id:'1',
-        name:'FJU Lyon',
-    },
-    {
-        id:'2',
-        name:'FJU Paris',
-    },
-    {
-        id:'3',
-        name:'FJU Bordeux',
-    },
-    {
-        id:'4',
-        name:'FJU VileJuif',
-    },
-];
+

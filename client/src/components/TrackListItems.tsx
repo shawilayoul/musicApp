@@ -14,6 +14,7 @@ const TrackListItems = ({ track, selectedTrack }: TrackPlayerListType) => {
     const [currentTrackId, setCurrentTrackId] = useState(null);
     const { playing } = useIsPlaying();
     const { addFavorite, removeFavorites, isFavrite } = usePlayerContext();
+
     // handeling favorites fuctionalities
     const toggleFavorites = () => {
         if (!isFavrite(track?.id)) {
