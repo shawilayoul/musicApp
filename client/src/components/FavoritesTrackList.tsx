@@ -15,7 +15,7 @@ const FavoritesTrackList = ({ tracks }: TrackListType) => {
     const { playing } = useIsPlaying();
 
     const handleTrack = async (selectedTrack: Track) => {
-        const id = 'shawil';
+        const id = 'favorites';
 
         const trackIndex = tracks.findIndex((track) => track.url === selectedTrack.url);
         if (trackIndex === -1) { return; }

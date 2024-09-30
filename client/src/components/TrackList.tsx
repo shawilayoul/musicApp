@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { FlatList, FlatListProps, Text, StyleSheet } from 'react-native';
 import TrackListItems from './TrackListItems';
-import TrackPlayer, { useIsPlaying,Track } from 'react-native-track-player';
+import TrackPlayer, { useIsPlaying, Track } from 'react-native-track-player';
 import { usePlayerContext } from '../store/trackPlayerContext';
 import { View } from 'react-native';
 
@@ -15,7 +15,7 @@ const TrackList = ({ tracks }: TrackListType) => {
     const { playing } = useIsPlaying();
 
     const handleTrack = async (selectedTrack: Track) => {
-        const id = 'shawil';
+        const id = 'allsongs';
 
         const trackIndex = tracks.findIndex((track) => track.url === selectedTrack.url);
         if (trackIndex === -1) { return; }
@@ -25,12 +25,12 @@ const TrackList = ({ tracks }: TrackListType) => {
         if (isChangingQueue) {
             const beforeTrack = tracks.slice(0, trackIndex);
             const afterTrack = tracks.slice(trackIndex + 1);
+
             await TrackPlayer.reset();
 
             await TrackPlayer.add(selectedTrack);
             await TrackPlayer.add(afterTrack);
             await TrackPlayer.add(beforeTrack);
-
             if (playing) {
                 await TrackPlayer.pause();
             } else {

@@ -42,9 +42,7 @@ const PlaylistsDetailsScreen: React.FC<DetailsScreenProps> = ({ route }) => {
     }, [searchText, songs]);
 
 
-    const handleTrack = async (selectedTrack: Track) => {
-        const id = 'shawil';
-
+    const handleTrack = async (id:string, selectedTrack: Track) => {
         const trackIndex = songs.findIndex((track: { url: string; }) => track.url === selectedTrack.url);
         if (trackIndex === -1) { return; }
 

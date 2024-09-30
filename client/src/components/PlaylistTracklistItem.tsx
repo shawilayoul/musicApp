@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { Image, Text, View, StyleSheet, Pressable } from 'react-native';
 import { imageUrl } from '../assests/data/track';
-import TrackPlayer, { Event, useIsPlaying, useTrackPlayerEvents, Track } from 'react-native-track-player';
+import TrackPlayer, { Event, useIsPlaying, useTrackPlayerEvents, Track} from 'react-native-track-player';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../constants/colors';
 import { usePlayerContext } from '../store/trackPlayerContext';
 
 type TrackPlayerListType = {
     track: Track,
-    selectedTrack: (track: Track) => void;
+    selectedTrack: (id:string,track: Track) => void;
 };
 const PlaylistTracklistItem = ({ track, selectedTrack }: TrackPlayerListType) => {
     const [currentTrackId, setCurrentTrackId] = useState(null);
     const { playing } = useIsPlaying();
+    //const activeTrack = useActiveTrack();
     const { addFavorite, removeFavorites, isFavrite } = usePlayerContext();
 
     // handeling favorites fuctionalities
@@ -33,9 +34,10 @@ const PlaylistTracklistItem = ({ track, selectedTrack }: TrackPlayerListType) =>
         }
     });
 
-    const isPlaying = currentTrackId === track.id;
+    const isPlaying = currentTrackId === track?.id;
+   // console.log(currentTrackId,track?.id,activeTrack?.id)
     return (
-        <Pressable style={styles.container} onPress={() => selectedTrack(track)}>
+        <Pressable style={styles.container} onPress={() => selectedTrack(track?.id,track)}>
             <View style={styles.left}>
                 <Text>{track.id}</Text>
                 <Image source={{ uri: track?.artwork ?? imageUrl }} style={styles.image} />
