@@ -35,6 +35,7 @@ export default function PlayerProvider({ children }: PropsWithChildren) {
     const isFavrite = (songId: string) => {
         return favorites.includes(songId);
     };
+
     return (
         // eslint-disable-next-line react/react-in-jsx-scope
         <playerContext.Provider value={{ track, setTrack, activeQueueId, setActiveQueuedId, favorites, addFavorite, removeFavorites, isFavrite }}>

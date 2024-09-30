@@ -39,6 +39,7 @@ const Tab = createBottomTabNavigator<TabParamList>();
 enableScreens();
 const App = () => {
   const [isFloatingPlayerVisible, setIsFloatingPlayerVisible] = React.useState(true);
+
   React.useEffect(() => {
     const setupPlayer = async () => {
       try {
@@ -82,6 +83,7 @@ const App = () => {
     setupPlayer();
   }, []);
 
+
   const toggleFloatingPlayerVisibility = (visible: boolean | ((prevState: boolean) => boolean)) => {
     setIsFloatingPlayerVisible(visible);
   };
@@ -93,7 +95,7 @@ const App = () => {
           }}
             tabBar={(props) => (
               <View>
-                {isFloatingPlayerVisible && <FloadPlayer />}
+                 <FloadPlayer />
                 <BottomTabBar {...props} />
               </View>
             )} >
@@ -118,7 +120,7 @@ const App = () => {
                 <MaterialCommunityIcons name="playlist-music" size={25} color="#0a2472" />
               ),
             }} />
-              <Tab.Screen name="StackNavigation" options={{
+             <Tab.Screen name="StackNavigation" options={{
               headerShown: false, tabBarButton: () => null,  // This hides the tab icon
             }}>
                 {() => <StackNavigation toggleFloatingPlayerVisibility={toggleFloatingPlayerVisibility} />}

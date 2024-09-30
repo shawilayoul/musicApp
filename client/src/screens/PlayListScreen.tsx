@@ -48,7 +48,7 @@ const PlayListScreen: React.FC = () => {
             </View>
             <FlatList data={filteredTracks} keyExtractor={(item) => item.id}
                 renderItem={({ item }) =>
-                    <TouchableOpacity style={styles.listbtn}
+                    <TouchableOpacity
                         onPress={() => goToplaylistDetain(item.id, item.name)}>
                         <View style={styles.playlist}>
                             <View style={styles.playlistImage}>
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     playlist: {
         display: 'flex',
         color: 'white',
-        padding: 10,
+        padding: 5,
         borderRadius: 10,
         marginVertical: 5,
         flexDirection: 'row',
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         gap: 20,
         backgroundColor: 'white',
-        borderWidth: 1,
+        paddingVertical: 20,
     },
     playlistImage: {
         alignItems: 'center',
@@ -95,10 +95,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: Colors.lightblue,
     },
-    listbtn: {
-
-    },
     platlistTitle: {
-        fontSize: 22,
+        fontSize: 20,
+        fontWeight:'600',
     },
 });

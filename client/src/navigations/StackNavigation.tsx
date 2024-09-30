@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useIsFocused } from '@react-navigation/native';
 import FloadPlayer from '../components/FloadPlayer';
 import MusicPlayer from '../components/MusicPlayer';
-import PlaylistsDetailsScreen from '../components/PlaylistsDetailsScreen';
+import PlaylistsDetailsScreen from '../components/PlaylistsTracksList';
 
 export type RootStackParamList = {
     FloadPlayer: undefined;
@@ -25,7 +25,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 interface PlayerStackProps {
     toggleFloatingPlayerVisibility: (isVisible: boolean) => void;
 }
-const StackNavigation: React.FC<PlayerStackProps> = ({ toggleFloatingPlayerVisibility }) => {
+const StackNavigation: React.FC<PlayerStackProps> = ({toggleFloatingPlayerVisibility}) => {
     const isFoucused = useIsFocused();
     useEffect(() => {
         toggleFloatingPlayerVisibility(!isFoucused);

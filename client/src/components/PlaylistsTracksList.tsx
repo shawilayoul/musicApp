@@ -1,13 +1,14 @@
-import React, { useRef, useState } from 'react';
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigations/StackNavigation';
 import { playlistsongs } from '../assests/data/track';
-import TrackPlayer, { Event, Track, useActiveTrack, useIsPlaying, useTrackPlayerEvents } from 'react-native-track-player';
+import TrackPlayer, { Track, useIsPlaying } from 'react-native-track-player';
 import { Colors } from '../constants/colors';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { usePlayerContext } from '../store/trackPlayerContext';
+import PlaylistTracklistItem from './PlaylistTracklistItem';
+import { Searchbar } from 'react-native-paper';
 
 type DetailsScreenNavigationProp = StackNavigationProp<RootStackParamList, 'PlaylistsDetailsScreen'>;
 type DetailsScreenRouteProp = RouteProp<RootStackParamList, 'PlaylistsDetailsScreen'>;
@@ -18,35 +19,27 @@ type DetailsScreenProps = {
 };
 
 const PlaylistsDetailsScreen: React.FC<DetailsScreenProps> = ({ route }) => {
-    const [currentTrackId, setCurrentTrackId] = useState(null);
-    const [itemId, setItemID] = useState(null);
     const { playing } = useIsPlaying();
-    const { addFavorite, removeFavorites, isFavrite } = usePlayerContext();
     const queueOffset = useRef(0);
+    const [searchText, setSearchText] = useState('');
+    const [filteredTracks, setFilteredTracks] = useState<Track[]>([]);
     const { activeQueueId, setActiveQueuedId } = usePlayerContext();
 
-    const activeTrack = useActiveTrack();
     const { playlistId, playlistName } = route.params;
 
     const songs = playlistsongs[playlistId];
 
-    // handeling favorites fuctionalities
-    const toggleFavorites = (track) => {
-        if (!isFavrite(track?.id)) {
-            addFavorite(track?.id);
-        } else {
-            if (isFavrite(track?.id)) {
-                removeFavorites(track?.id);
-            }
-        }
-    };
 
-    useTrackPlayerEvents([Event.PlaybackActiveTrackChanged], async (event) => {
-        if (event.index != null) {
-            const trackId = await TrackPlayer.getTrack(event.index);
-            setCurrentTrackId(trackId?.id);
+    //search functionality
+    const onChangeSearch = (text: React.SetStateAction<string>) => setSearchText(text);
+
+    useEffect(() => {
+        if (!searchText) { setFilteredTracks(songs); }
+        else {
+            const filtered = songs.filter((track) => track?.title.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()));
+            setFilteredTracks(filtered);
         }
-    });
+    }, [searchText, songs]);
 
 
     const handleTrack = async (selectedTrack: Track) => {
@@ -88,34 +81,22 @@ const PlaylistsDetailsScreen: React.FC<DetailsScreenProps> = ({ route }) => {
         }
     };
 
-    const isPlaying = (activeTrack?.id === itemId);
-    console.log(isPlaying,itemId,currentTrackId,activeTrack)
     return (
         <View style={styles.container}>
-            <Text style={styles.playlistName}>{playlistName}</Text>
-            <FlatList data={songs}
+            <View style={styles.playlistNameContainer}>
+                <Text style={styles.playlistName}>{playlistName} Playlist</Text>
+            </View>
+            <View style={styles.searchbarContainer}>
+                <Searchbar
+                    placeholder="search by song title ...."
+                    value={searchText}
+                    style={styles.searchBar}
+                    onChangeText={onChangeSearch}
+                />
+            </View>
+            <FlatList data={filteredTracks}
                 keyExtractor={(item) => item.id}
-                renderItem={({ item }) =>
-                (<TouchableOpacity onPress={() => { handleTrack(item); setItemID(item?.id) }} >
-                    <View style={styles.playlistItemsContainer}><View style={styles.playlistItems}>
-                        <Image source={{ uri: item?.artwork }} width={40} height={40} />
-                        <View>
-                            <Text style={{ color: Colors.title }}>{item.title}</Text>
-                            <Text>{item.artist}</Text>
-                        </View>
-                    </View>
-                        <View style={styles.playIcon}>
-                            <Icon name="heart"
-                                size={25}
-                                color={isFavrite(item?.id) ? Colors.activeTitle : Colors.gray} onPress={() => toggleFavorites(item)} />
-                            <Icon
-                                name={(isPlaying && playing) ? 'pause' : 'play'} // Change icon based on play/pause state
-                                size={25}
-                                color={(isPlaying && playing) ? Colors.activeTitle : Colors.icon} // Color based on state
-                            />
-                        </View>
-                    </View>
-                </TouchableOpacity>)} />
+                renderItem={({ item: track }) => (<PlaylistTracklistItem track={track} selectedTrack={handleTrack} />)} />
         </View>
     );
 };
@@ -125,9 +106,24 @@ export default PlaylistsDetailsScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        width: '95%',
-        margin: 'auto',
-        paddingVertical: 10,
+    },
+    playlistNameContainer: {
+        backgroundColor: Colors.white,
+        width: '100%',
+    },
+    playlistName: {
+        color: Colors.title,
+        fontSize: 20,
+        fontWeight: '600',
+        marginVertical: 10,
+        padding: 10,
+    },
+    searchbarContainer: {
+        padding: 10,
+    },
+    searchBar: {
+        borderRadius: 10,
+        backgroundColor: Colors.lightblue,
     },
     playlistItemsContainer: {
         flexDirection: 'row',
@@ -136,12 +132,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         borderRadius: 10,
         marginVertical: 5,
-    },
-    playlistName: {
-        color: Colors.title,
-        fontSize: 20,
-        fontWeight: '600',
-        marginVertical: 10,
     },
     playlistItems: {
         padding: 10,

@@ -104,7 +104,15 @@ export const playlists: Track[] = [
   },
 ];
 
-export const playlistsongs = {
+interface playlist {
+  id:string,
+  title:string,
+  artist:string,
+  artwork:string,
+  url:any
+}
+
+export const playlistsongs:{[key:string]: playlist[]} = {
   '1': [
     {
       id: '1',
