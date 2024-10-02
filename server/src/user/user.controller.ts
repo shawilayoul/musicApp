@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -31,11 +31,17 @@ export class UserController {
     return this.userService.getUserPlayLists(userId);
   }
   // add liked tracks by user
-  @Put(':userId')
+  @Post(':userId/like/:trackId')
   async addLikedTrack(
     @Param('userId') userId: string,
-    @Body() trackId: string,
+    @Param('trackId') trackId: string,
   ) {
     return this.userService.addLikedTrack(userId, trackId);
+  }
+
+  // det tacks like by user
+  @Get(':userId/likedTrack')
+  async getTracksLikedByUser(@Param('userId') userId: string) {
+    return this.userService.getTracksLikedByUser(userId);
   }
 }
