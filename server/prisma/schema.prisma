@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  username    String
+  email       String       @unique
+  password    String
+  createdAt   DateTime     @default(now())
+  playlists   Playlist[]
+  likedTracks LikedTrack[]
+}
+
+model Track {
+  id        String          @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  artist    String
+  url       String
+  artwork   String
+  duration  Int
+  playlists PlaylistTrack[]
+  likedBy   LikedTrack[]
+  createdAt DateTime        @default(now())
+}
+
+model Playlist {
+  id        String          @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  userId    String?         @db.ObjectId
+  user      User?           @relation(fields: [userId], references: [id])
+  tracks    PlaylistTrack[]
+  createdAt DateTime        @default(now())
+}
+
+// to handel many to many relationship beteween playlist and track
+model PlaylistTrack {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  playlistId String   @db.ObjectId
+  trackId    String   @db.ObjectId
+  playlist   Playlist @relation(fields: [playlistId], references: [id])
+  track      Track    @relation(fields: [trackId], references: [id])
+
+  @@unique([playlistId, trackId])
+}
+
+// to handel many to many relationship beteween user who liked the track
+
+model LikedTrack {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  userId  String @db.ObjectId
+  trackId String @db.ObjectId
+  user    User   @relation(fields: [userId], references: [id])
+  track   Track  @relation(fields: [trackId], references: [id])
+
+  // To prevent duplicate records
+  @@unique([userId, trackId])
+}
