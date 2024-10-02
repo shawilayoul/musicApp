@@ -6,7 +6,7 @@ export class PlaylistService {
   constructor(private prisma: PrismaService) {}
 
   // create a playlist
-  async createPlaylist(data: { name: string }) {
+  async createPlaylist(data: { name: string; userId: string }) {
     return this.prisma.playlist.create({ data });
   }
 
@@ -57,19 +57,6 @@ export class PlaylistService {
         },
       },
     });
-    console.log('playlist with tack', playlist);
-
-    const tracksInPlaylist = await this.prisma.playlistTrack.findMany({
-      where: {
-        playlistId: playlistId,
-      },
-      include: {
-        track: true,
-      },
-    });
-
-    console.log('Tracks in Playlist:', tracksInPlaylist);
-    console.log('Fetched playlist with tracks', playlistWithTracks);
     return playlistWithTracks;
   }
 }

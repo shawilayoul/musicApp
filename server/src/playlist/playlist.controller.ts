@@ -5,13 +5,14 @@ import { PlaylistService } from './playlist.service';
 export class PlaylistController {
   constructor(private playlistService: PlaylistService) {}
   @Post()
-  async createPlaylist(@Body() data: { name: string }) {
+  async createPlaylist(@Body() data: { name: string; userId: string }) {
     return this.playlistService.createPlaylist(data);
   }
-  /* @Get(':userId')
+  // get user playlist
+  @Get(':userId')
   async getUserPlaylist(@Param('userId') userId: string) {
     return this.playlistService.getUserPlaylist(userId);
-  }*/
+  }
 
   // add track to playlist
   @Post(':playlistId/addTrack/:trackId')
@@ -32,7 +33,7 @@ export class PlaylistController {
   }
 
   //get playlist with tracks
-  @Get('tracks/:playlistId')
+  @Get('playlistTracks/:playlistId')
   async getPlaylistWithTracks(@Param('playlistId') playlistId: string) {
     return this.playlistService.getPlaylistWithTrack(playlistId);
   }
