@@ -41,10 +41,10 @@ const router = createBrowserRouter([
             { path: "/albums/edit", element: <EditAlbum /> },
             { path: "/albums/view", element: <ViewAlbum /> },
 
-            { path: "/artist", element: <Artists /> },
-            { path: "/artist/add", element: <AddArtist /> },
-            { path: "/artist/edit", element: <EditArtist /> },
-            { path: "/artist/profile", element: <ArtistProfile /> },
+            { path: "/artists", element: <Artists /> },
+            { path: "/artists/add", element: <AddArtist /> },
+            { path: "/artists/edit", element: <EditArtist /> },
+            { path: "/artists/profile", element: <ArtistProfile /> },
 
             { path: "/events", element: <Events /> },
             { path: "/events/add", element: <AddEvent /> },

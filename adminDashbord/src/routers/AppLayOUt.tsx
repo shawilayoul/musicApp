@@ -5,20 +5,19 @@ import Footer from "../components/Footer"
 
 const AppLayOUt = () => {
     return (
-        <div className="bg-gray-300 ">
-            <div className="bg-red-300">
+        <div className="max-w-full">
+            <div className="bg-blue-400 fixed w-full">
                 <Header />
             </div>
-            <div className="flex">
-                <div className="bg-blue-400  text-white">
+            <div className="flex justify-betwee w-full">
+                <div className="bg-blue-400 h-screen w-[18%] fixed text-white">
                     <SideBar />
                 </div>
-                <div>
+                <div className="p-2 w-[100%]  h-screen  ml-[18%] mt-[60px]">
                     <Outlet />
                 </div>
             </div>
-            <div className="bg-red-300"> <Footer /></div>
-
+            <div className=""> <Footer /></div>
         </div>
     )
 }
