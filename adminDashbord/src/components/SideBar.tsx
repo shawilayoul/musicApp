@@ -22,6 +22,26 @@ const SideBar = () => {
         <MdOutlineDashboard />
         <Link to="/">Dashboard</Link>
       </div>
+      <div className="Playlist">
+        <div className="flex items-center justify-between w-full p-2  hover:bg-blue-300 " onClick={() => setTogglePlaylists(!togglePlaylists)}>
+          <div className="flex items-center gap-3">
+            <TbPlaylist /> <h3>Playlists</h3>
+          </div>
+
+          <div className="arrow">
+            {
+              togglePlaylists ? <FaAngleDown /> : <FaAngleLeft />
+            }
+          </div>
+        </div>
+        {togglePlaylists && <ul className="flex flex-col ml-6 ">
+          <li className="p-1  hover:bg-blue-300 "><Link to="/playlists">Playlists</Link></li>
+          <li className="p-1 hover:bg-blue-300 "><Link to="/playlists/add">Add Playlist</Link></li>
+          <li className="p-1 hover:bg-blue-300 "><Link to="/playlists/edit">Edit Playlist</Link></li>
+          <li className="p-1 hover:bg-blue-300 "><Link to="/playlists/view">View Playlist</Link></li>
+        </ul>}
+
+      </div>
       <div className="albums">
         <div className="flex items-center justify-between w-full p-2  hover:bg-blue-300 " onClick={() => setToggleAlbums(!toggleAlbums)}>
           <div className="flex items-center gap-3">
@@ -39,6 +59,25 @@ const SideBar = () => {
           <li className="p-1 hover:bg-blue-300 "><Link to="/albums/add">Add Album</Link></li>
           <li className="p-1 hover:bg-blue-300 "><Link to="/albums/edit">Edit Album</Link></li>
           <li className="p-1 hover:bg-blue-300 "><Link to="/albums/view">View Albums</Link></li>
+        </ul>}
+
+      </div>
+      <div className="songs">
+        <div className="flex items-center justify-between w-full p-2  hover:bg-blue-300 " onClick={() => setToggleSongs(!toggleSongs)}>
+          <div className="flex items-center gap-3">
+            <FaMusic /> <h3>Songs</h3>
+          </div>
+
+          <div className="arrow">
+            {
+              toggleSongs ? <FaAngleDown /> : <FaAngleLeft />
+            }
+          </div>
+        </div>
+        {toggleSongs && <ul className="flex flex-col ml-6 ">
+          <li className="p-1  hover:bg-blue-300 "><Link to="/songs/add">Add Song</Link></li>
+          <li className="p-1 hover:bg-blue-300 "><Link to="/songs/edit">Edit Song</Link></li>
+          <li className="p-1 hover:bg-blue-300 "><Link to="/songs/detail">Song Details</Link></li>
         </ul>}
 
       </div>
@@ -62,24 +101,7 @@ const SideBar = () => {
         </ul>}
 
       </div>
-      <div className="events">
-        <div className="flex items-center justify-between w-full p-2  hover:bg-blue-300 " onClick={() => setToggleEvents(!toggleEvents)}>
-          <div className="flex items-center gap-3">
-            <FaRegCalendarAlt /> <h3>Events</h3>
-          </div>
 
-          <div className="arrow">
-            {
-              toggleEvents ? <FaAngleDown /> : <FaAngleLeft />
-            }
-          </div>
-        </div>
-        {toggleEvents && <ul className="flex flex-col ml-6 ">
-          <li className="p-1  hover:bg-blue-300 "><Link to="/events">Events</Link></li>
-          <li className="p-1 hover:bg-blue-300 "><Link to="/events/add">Add Event</Link></li>
-        </ul>}
-
-      </div>
       <div className="genres">
         <div className="flex items-center justify-between w-full p-2  hover:bg-blue-300 " onClick={() => setToggleGenres(!toggleGenres)}>
           <div className="flex items-center gap-3">
@@ -96,45 +118,6 @@ const SideBar = () => {
           <li className="p-1  hover:bg-blue-300 "><Link to="/genres">Genres</Link></li>
           <li className="p-1 hover:bg-blue-300 "><Link to="/genres/add">Add Genre</Link></li>
           <li className="p-1 hover:bg-blue-300 "><Link to="/genres/edit">Edit Genre</Link></li>
-        </ul>}
-
-      </div>
-      <div className="mailBox">
-        <div className="flex items-center justify-between w-full p-2  hover:bg-blue-300 " onClick={() => setToggleMailbox(!toggleMailBox)}>
-          <div className="flex items-center gap-3">
-            <MdMailOutline /> <h3>Mail Box</h3>
-          </div>
-
-          <div className="arrow">
-            {
-              toggleMailBox ? <FaAngleDown /> : <FaAngleLeft />
-            }
-          </div>
-        </div>
-        {toggleMailBox && <ul className="flex flex-col ml-6 ">
-          <li className="p-1  hover:bg-blue-300 "><Link to="/mailBox">InBox</Link></li>
-          <li className="p-1 hover:bg-blue-300 "><Link to="/mailBox/compose">Compose</Link></li>
-          <li className="p-1 hover:bg-blue-300 "><Link to="/mailBox/view">View</Link></li>
-        </ul>}
-
-      </div>
-      <div className="Playlist">
-        <div className="flex items-center justify-between w-full p-2  hover:bg-blue-300 " onClick={() => setTogglePlaylists(!togglePlaylists)}>
-          <div className="flex items-center gap-3">
-            <TbPlaylist /> <h3>Playlists</h3>
-          </div>
-
-          <div className="arrow">
-            {
-              togglePlaylists ? <FaAngleDown /> : <FaAngleLeft />
-            }
-          </div>
-        </div>
-        {togglePlaylists && <ul className="flex flex-col ml-6 ">
-          <li className="p-1  hover:bg-blue-300 "><Link to="/playlists">Playlists</Link></li>
-          <li className="p-1 hover:bg-blue-300 "><Link to="/playlists/add">Add Playlist</Link></li>
-          <li className="p-1 hover:bg-blue-300 "><Link to="/playlists/edit">Edit Playlist</Link></li>
-          <li className="p-1 hover:bg-blue-300 "><Link to="/playlists/view">View Playlist</Link></li>
         </ul>}
 
       </div>
@@ -158,22 +141,40 @@ const SideBar = () => {
         </ul>}
 
       </div>
-      <div className="songs">
-        <div className="flex items-center justify-between w-full p-2  hover:bg-blue-300 " onClick={() => setToggleSongs(!toggleSongs)}>
+      <div className="events">
+        <div className="flex items-center justify-between w-full p-2  hover:bg-blue-300 " onClick={() => setToggleEvents(!toggleEvents)}>
           <div className="flex items-center gap-3">
-            <FaMusic /> <h3>Songs</h3>
+            <FaRegCalendarAlt /> <h3>Events</h3>
           </div>
 
           <div className="arrow">
             {
-              toggleSongs ? <FaAngleDown /> : <FaAngleLeft />
+              toggleEvents ? <FaAngleDown /> : <FaAngleLeft />
             }
           </div>
         </div>
-        {toggleSongs && <ul className="flex flex-col ml-6 ">
-          <li className="p-1  hover:bg-blue-300 "><Link to="/songs/add">Add Song</Link></li>
-          <li className="p-1 hover:bg-blue-300 "><Link to="/songs/edit">Edit Song</Link></li>
-          <li className="p-1 hover:bg-blue-300 "><Link to="/songs/detail">Song Details</Link></li>
+        {toggleEvents && <ul className="flex flex-col ml-6 ">
+          <li className="p-1  hover:bg-blue-300 "><Link to="/events">Events</Link></li>
+          <li className="p-1 hover:bg-blue-300 "><Link to="/events/add">Add Event</Link></li>
+        </ul>}
+
+      </div>
+      <div className="mailBox">
+        <div className="flex items-center justify-between w-full p-2  hover:bg-blue-300 " onClick={() => setToggleMailbox(!toggleMailBox)}>
+          <div className="flex items-center gap-3">
+            <MdMailOutline /> <h3>Mail Box</h3>
+          </div>
+
+          <div className="arrow">
+            {
+              toggleMailBox ? <FaAngleDown /> : <FaAngleLeft />
+            }
+          </div>
+        </div>
+        {toggleMailBox && <ul className="flex flex-col ml-6 ">
+          <li className="p-1  hover:bg-blue-300 "><Link to="/mailBox">InBox</Link></li>
+          <li className="p-1 hover:bg-blue-300 "><Link to="/mailBox/compose">Compose</Link></li>
+          <li className="p-1 hover:bg-blue-300 "><Link to="/mailBox/view">View</Link></li>
         </ul>}
 
       </div>

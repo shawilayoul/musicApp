@@ -36,12 +36,16 @@ model Track {
 }
 
 model Playlist {
-  id        String          @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  userId    String?         @db.ObjectId
-  user      User?           @relation(fields: [userId], references: [id])
-  tracks    PlaylistTrack[]
-  createdAt DateTime        @default(now())
+  id           String          @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  userId       String?         @db.ObjectId
+  length       Int?
+  genre        String?
+  descriptions String?
+  image        String?
+  user         User?           @relation(fields: [userId], references: [id])
+  tracks       PlaylistTrack[]
+  createdAt    DateTime        @default(now())
 }
 
 // to handel many to many relationship beteween playlist and track

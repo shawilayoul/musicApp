@@ -1,12 +1,13 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { PlaylistService } from './playlist.service';
+import { PlaylistDto } from 'src/Dto/playlistDto';
 
 @Controller('playlist')
 export class PlaylistController {
   constructor(private playlistService: PlaylistService) {}
   @Post()
-  async createPlaylist(@Body() data: { name: string; userId: string }) {
-    return this.playlistService.createPlaylist(data);
+  async createPlaylist(@Body() dto: PlaylistDto) {
+    return this.playlistService.createPlaylist(dto);
   }
   // get user playlist
   @Get(':userId')
