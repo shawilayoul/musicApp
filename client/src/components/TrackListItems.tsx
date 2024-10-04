@@ -37,8 +37,7 @@ const TrackListItems = ({ track, selectedTrack }: TrackPlayerListType) => {
     return (
         <Pressable style={styles.container} onPress={() => selectedTrack(track)}>
             <View style={styles.left}>
-                <Text>{track.id}</Text>
-                <Image source={{ uri: track?.artwork ?? imageUrl }} style={styles.image} />
+                <Image source={{ uri: track?.artwork || imageUrl }} style={styles.image} />
 
                 <View>
                     <Text style={(isPlaying && playing) ? { color: Colors.activeTitle } : { color: Colors.title }}>{track?.title ?? ''}</Text>

@@ -23,9 +23,9 @@ const Playlists = () => {
         {
           userPlaylist.map(({ name, genre, image }) => {
             return (
-                  <div className="bg-blue-400 rounded-md p-2 flex flex-col items-center w-[150px]">
+                  <div className="bg-blue-400 rounded-md p-1 shadow-md flex flex-col items-center w-[150px]">
                     <div>
-                      <img src={image} alt="playlistImage" className="w-[150px]" />
+                      <img src={image} alt="playlistImage" className="w-[150px] rounded-sm" />
                     </div>
                     <div className="flex flex-col items-center gap-1 mt-2 text-white">
                       <h3>{name}</h3>

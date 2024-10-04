@@ -27,34 +27,34 @@ const AddPlaylist = () => {
     }
   }
   return (
-    <div className="flex flex-col">
-      <h2>Add Playlist</h2>
-      <form onSubmit={handelSubmit} className="p-2 flex flex-col w-52 justify-center gap-2">
+    <div className="flex items-center flex-col p-2 gap-2 w-full">
+      <h2 className="text-xl font-medium">Add Playlist</h2>
+      <form onSubmit={handelSubmit} className="bg-gray-100 shadow-md w-8/12 p-2 flex flex-col items-center gap-2">
         <div>
           <h3>Title</h3>
-          <input type="text" placeholder="Enter playlist title" className="p-1 border" required value={name} onChange={(e) => setName(e.target.value)} />
+          <input type="text" placeholder="Enter playlist title" className="p-2 rounded-md border w-[400px]" required value={name} onChange={(e) => setName(e.target.value)} />
         </div>
         <div>
           <h3>userId</h3>
-          <input type="text" placeholder="user Id" className="p-1 border" required value={userId} onChange={(e) => setUserId(e.target.value)} />
+          <input type="text" placeholder="user Id" className="p-2  rounded-md border  w-[400px]" required value={userId} onChange={(e) => setUserId(e.target.value)} />
         </div>
         <div>
           <h3>Genre</h3>
-          <input type="text" placeholder="genre" className="p-1 border" required value={genre} onChange={(e) => setGenre(e.target.value)} />
+          <input type="text" placeholder="genre" className="p-2  rounded-md border  w-[400px]" required value={genre} onChange={(e) => setGenre(e.target.value)} />
         </div>
         <div>
           <h3>Descriptions</h3>
-          <input type="text" placeholder="descriptions" className="p-1 border" required value={descriptions} onChange={(e) => setDescriptions(e.target.value)} />
+          <input type="text" placeholder="descriptions" className="p-2  rounded-md border  w-[400px]" required value={descriptions} onChange={(e) => setDescriptions(e.target.value)} />
         </div>
         <div>
           <h3>Playlist Image</h3>
-          <input type="text" placeholder="playlist image" className="p-1 border" required value={image} onChange={(e) => setImage(e.target.value)} />
+          <input type="text" placeholder="playlist image" className="p-2  rounded-md border  w-[400px]" required value={image} onChange={(e) => setImage(e.target.value)} />
         </div>
         <div>
           <h3>Playlist Lenght</h3>
-          <input type="text" placeholder="playlist Length" className="p-1 border" required value={lenght} onChange={(e) => setLength(e.target.value)} />
+          <input type="text" placeholder="playlist Length" className="p-2 rounded-md border  w-[400px]" required value={lenght} onChange={(e) => setLength(e.target.value)} />
         </div>
-        <button type="submit" className="bg-blue-400 px-2 py-1 text-white" >Add </button>
+        <button type="submit" className="bg-blue-400  rounded-md p-2 text-white  w-[400px]" >Add </button>
       </form>
     </div>
   )
