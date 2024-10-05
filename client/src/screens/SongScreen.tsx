@@ -17,7 +17,7 @@ const SongsScreen = () => {
     useEffect(() => {
         const getUserPlaylist = async () => {
             try {
-                const response = await axios.get('http://192.168.96.194:3000/track');
+                const response = await axios.get('https://musicserver-h836.onrender.com//track');
                 //http://192.168.1.10:3000/track for phical device
                 //http://10.0.2.2:3000/track for emulator
                 setTracks(response.data);

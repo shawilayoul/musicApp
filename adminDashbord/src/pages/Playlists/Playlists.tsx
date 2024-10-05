@@ -7,7 +7,7 @@ const Playlists = () => {
   useEffect(() => {
     const getUserPlaylist = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/playlist/66fc66651c032413823ea923');
+        const response = await axios.get('https://musicserver-h836.onrender.com/playlist/66fc66651c032413823ea923');
         setUserPlaylist(response.data)
       } catch (error) {
         console.log('error getting user platlist', error)
