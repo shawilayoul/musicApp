@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Image, Text, View, StyleSheet, Pressable } from 'react-native';
 import { imageUrl } from '../assests/data/track';
-import TrackPlayer, { Event, useIsPlaying, useTrackPlayerEvents, Track} from 'react-native-track-player';
+import TrackPlayer, { Event, useIsPlaying, useTrackPlayerEvents, Track } from 'react-native-track-player';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../constants/colors';
 import { usePlayerContext } from '../store/trackPlayerContext';
 
 type TrackPlayerListType = {
     track: Track,
-    selectedTrack: (id:string,track: Track) => void;
+    selectedTrack: (id: string, track: Track) => void;
 };
 const PlaylistTracklistItem = ({ track, selectedTrack }: TrackPlayerListType) => {
     const [currentTrackId, setCurrentTrackId] = useState(null);
@@ -21,7 +21,7 @@ const PlaylistTracklistItem = ({ track, selectedTrack }: TrackPlayerListType) =>
         if (!isFavrite(track?.id)) {
             addFavorite(track?.id);
         } else {
-            if (isFavrite(track?.id)){
+            if (isFavrite(track?.id)) {
                 removeFavorites(track?.id);
             }
         }
@@ -34,12 +34,15 @@ const PlaylistTracklistItem = ({ track, selectedTrack }: TrackPlayerListType) =>
         }
     });
 
+    TrackPlayer.addEventListener(Event.PlaybackError, (error) => {
+        console.error('An error occurred while trying to play the track', error);
+    });
+
     const isPlaying = currentTrackId === track?.id;
-   // console.log(currentTrackId,track?.id,activeTrack?.id)
+    console.log(track?.url)
     return (
-        <Pressable style={styles.container} onPress={() => selectedTrack(track?.id,track)}>
+        <Pressable style={styles.container} onPress={() => selectedTrack(track?.id, track)}>
             <View style={styles.left}>
-                <Text>{track.id}</Text>
                 <Image source={{ uri: track?.artwork ?? imageUrl }} style={styles.image} />
 
                 <View>
@@ -50,7 +53,7 @@ const PlaylistTracklistItem = ({ track, selectedTrack }: TrackPlayerListType) =>
             <View style={styles.playIcon}>
                 <Icon name="heart"
                     size={25}
-                    color={isFavrite(track?.id) ? Colors.activeTitle : Colors.gray } onPress={() => toggleFavorites()} />
+                    color={isFavrite(track?.id) ? Colors.activeTitle : Colors.gray} onPress={() => toggleFavorites()} />
                 <Icon
                     name={(isPlaying && playing) ? 'pause' : 'play'} // Change icon based on play/pause state
                     size={25}

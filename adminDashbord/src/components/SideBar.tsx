@@ -76,7 +76,7 @@ const SideBar = () => {
         </div>
         {toggleSongs && <ul className="flex flex-col ml-6 ">
           <li className="p-1  hover:bg-blue-300 "><Link to="/songs/add">Add Song</Link></li>
-          <li className="p-1 hover:bg-blue-300 "><Link to="/songs/edit">Edit Song</Link></li>
+          <li className="p-1 hover:bg-blue-300 "><Link to="/songs/AddSongToPlaylist">Add Song to Playlist</Link></li>
           <li className="p-1 hover:bg-blue-300 "><Link to="/songs/detail">Song Details</Link></li>
         </ul>}
 

@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom";
 
 const Playlists = () => {
   const [userPlaylist, setUserPlaylist] = useState([]);
+const navigate = useNavigate()
 
   useEffect(() => {
     const getUserPlaylist = async () => {
@@ -21,9 +23,9 @@ const Playlists = () => {
       <h2 className="py-2 text-xl font-medium">All Playlists</h2>
       <div className="playlist flex gap-4">
         {
-          userPlaylist.map(({ name, genre, image }) => {
+          userPlaylist.map(({ name, genre, image ,id}) => {
             return (
-                  <div className="bg-blue-400 rounded-md p-1 shadow-md flex flex-col items-center w-[150px]">
+                  <div className="bg-blue-400 rounded-md p-1 shadow-md flex flex-col items-center w-[150px]" onClick={()=>navigate(`/playlists/view/${id}`)}>
                     <div>
                       <img src={image} alt="playlistImage" className="w-[150px] rounded-sm" />
                     </div>

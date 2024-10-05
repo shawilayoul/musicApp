@@ -26,7 +26,7 @@ import Statistics from "../pages/Reports/Statistics"
 import Trending from "../pages/Reports/Trending"
 import Visitors from "../pages/Reports/Visitors"
 import AddSong from "../pages/Songs/AddSong"
-import EditSong from "../pages/Songs/EditSong"
+import AddSongToPlaylist  from "../pages/Songs/AddSongToPlaylist"
 import SongDetail from "../pages/Songs/SongDetail"
 import SongsUploader from "../pages/SongsUploader"
 
@@ -60,7 +60,7 @@ const router = createBrowserRouter([
             { path: "/playlists", element: <Playlists /> },
             { path: "/playlists/add", element: <AddPlaylist /> },
             { path: "/playlists/edit", element: <EditPlaylist /> },
-            { path: "/playlists/view", element: <ViewPlaylist /> },
+            { path: "/playlists/view/:id", element: <ViewPlaylist /> },
 
             { path: "/reports/songs", element: <SongsReport /> },
             { path: "/reports/statistics", element: <Statistics /> },
@@ -68,7 +68,7 @@ const router = createBrowserRouter([
             { path: "/reports/visitors", element: <Visitors /> },
 
             { path: "/songs/add", element: <AddSong /> },
-            { path: "/songs/edit", element: <EditSong /> },
+            { path: "/songs/AddSongToPlaylist", element: <AddSongToPlaylist  /> },
             { path: "/songs/detail", element: <SongDetail /> },
 
             { path: "/songsUploader", element: <SongsUploader /> },
