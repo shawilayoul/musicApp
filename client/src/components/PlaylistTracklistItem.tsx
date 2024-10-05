@@ -1,11 +1,20 @@
 import React, { useState } from 'react';
 import { Image, Text, View, StyleSheet, Pressable } from 'react-native';
 import { imageUrl } from '../assests/data/track';
-import TrackPlayer, { Event, useIsPlaying, useTrackPlayerEvents, Track } from 'react-native-track-player';
+import TrackPlayer, { Event, useIsPlaying, useTrackPlayerEvents } from 'react-native-track-player';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../constants/colors';
 import { usePlayerContext } from '../store/trackPlayerContext';
 
+interface Track {
+    id: string;
+    title: string;
+    artist: string;
+    artwork: string;
+    url: string;
+    createdAt: string; // Ensure this matches the type that TypeScript expects
+    duration: number;
+}
 type TrackPlayerListType = {
     track: Track,
     selectedTrack: (id: string, track: Track) => void;
@@ -39,7 +48,6 @@ const PlaylistTracklistItem = ({ track, selectedTrack }: TrackPlayerListType) =>
     });
 
     const isPlaying = currentTrackId === track?.id;
-    console.log(track?.url)
     return (
         <Pressable style={styles.container} onPress={() => selectedTrack(track?.id, track)}>
             <View style={styles.left}>

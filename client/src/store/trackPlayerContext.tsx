@@ -1,6 +1,14 @@
 import { createContext, PropsWithChildren, useContext, useState } from 'react';
-import { Track } from 'react-native-track-player';
 
+interface Track {
+    id: string;
+    title: string;
+    artist: string;
+    artwork: string;
+    url: string;
+    createdAt: string; // Ensure this matches the type that TypeScript expects
+    duration: number;
+  }
 type PlayerProiderType = {
     track?: Track,
     setTrack: (track: Track) => void,

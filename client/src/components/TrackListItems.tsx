@@ -20,7 +20,7 @@ const TrackListItems = ({ track, selectedTrack }: TrackPlayerListType) => {
         if (!isFavrite(track?.id)) {
             addFavorite(track?.id);
         } else {
-            if (isFavrite(track?.id)){
+            if (isFavrite(track?.id)) {
                 removeFavorites(track?.id);
             }
         }
@@ -37,8 +37,7 @@ const TrackListItems = ({ track, selectedTrack }: TrackPlayerListType) => {
     return (
         <Pressable style={styles.container} onPress={() => selectedTrack(track)}>
             <View style={styles.left}>
-                <Image source={{ uri: track?.artwork ?? imageUrl }} style={styles.image} />
-
+                <Image source={{ uri: track?.artwork || imageUrl }} style={styles.image} />
                 <View>
                     <Text style={(isPlaying && playing) ? { color: Colors.activeTitle } : { color: Colors.title }}>{track?.title ?? ''}</Text>
                     <Text>{track?.artist ?? ''}</Text>
@@ -47,7 +46,7 @@ const TrackListItems = ({ track, selectedTrack }: TrackPlayerListType) => {
             <View style={styles.playIcon}>
                 <Icon name="heart"
                     size={25}
-                    color={isFavrite(track?.id) ? Colors.activeTitle : Colors.gray } onPress={() => toggleFavorites()} />
+                    color={isFavrite(track?.id) ? Colors.activeTitle : Colors.gray} onPress={() => toggleFavorites()} />
                 <Icon
                     name={(isPlaying && playing) ? 'pause' : 'play'} // Change icon based on play/pause state
                     size={25}

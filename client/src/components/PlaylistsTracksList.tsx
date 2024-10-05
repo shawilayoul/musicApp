@@ -4,7 +4,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigations/StackNavigation';
 //import { playlistsongs } from '../assests/data/track';
-import TrackPlayer, { Track, useIsPlaying } from 'react-native-track-player';
+import TrackPlayer, { useIsPlaying } from 'react-native-track-player';
 import { Colors } from '../constants/colors';
 import { usePlayerContext } from '../store/trackPlayerContext';
 import PlaylistTracklistItem from './PlaylistTracklistItem';
@@ -19,76 +19,92 @@ type DetailsScreenProps = {
     route: DetailsScreenRouteProp;
 };
 
+interface Track {
+    id: string;
+    title: string;
+    artist: string;
+    artwork: string;
+    url: string;
+    createdAt: string; // Ensure this matches the type that TypeScript expects
+    duration: number;
+  }
+
 const PlaylistsDetailsScreen: React.FC<DetailsScreenProps> = ({ route }) => {
     const { playing } = useIsPlaying();
     const queueOffset = useRef(0);
     const [searchText, setSearchText] = useState('');
     const [filteredTracks, setFilteredTracks] = useState<Track[]>([]);
     const { activeQueueId, setActiveQueuedId } = usePlayerContext();
-    const [allSongs, setAllSongs] = useState<Track[]>([]);
+    const [tracks, setAllSongs] = useState<Track[]>([]);
     const { playlistId, playlistName } = route.params;
 
-    //const songs = playlistsongs[playlistId];
+    //const allSongs = playlistsongs[playlistId];
 
+    // get track from array
+    //const tracks = allSongs.map((item) => item.track);
+
+    //search functionality
+    const onChangeSearch = (text: React.SetStateAction<string>) => setSearchText(text);
 
     useEffect(() => {
         const getUserPlaylist = async () => {
             try {
                 const response = await axios.get(`https://musicserver-h836.onrender.com/playlist/playlistTracks/${playlistId}`);
-                setAllSongs(response.data.tracks);
+                setAllSongs(response.data.tracks.map((item: { track: any; }) => item.track));
             } catch (error) {
                 console.log('error getting user platlist', error);
             }
         };
         getUserPlaylist();
+
     }, [playlistId]);
-    //search functionality
-    const onChangeSearch = (text: React.SetStateAction<string>) => setSearchText(text);
+
+    //filtering tracks by title
 
     useEffect(() => {
-        if (!searchText) { setFilteredTracks(allSongs); }
+        if (!searchText) { setFilteredTracks(tracks); }
         else {
-            const filtered = allSongs.filter((track) => track?.title.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()));
+            const filtered = tracks.filter((track) => track?.title.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()));
             setFilteredTracks(filtered);
         }
-    }, [allSongs, searchText]);
+    }, [searchText, tracks]);
 
-    const handleTrack = async (id: string, selectedTrack: Track) => {
-        const trackIndex = allSongs.findIndex((track: { url: string; }) => track.url === selectedTrack.url);
-        if (trackIndex === -1) { return; }
+    type TrackHandler = (id: string, track: Track) => Promise<void>;
+    const handleTrack: TrackHandler = async (id, selectedTrack) => {
+            const trackIndex = tracks.findIndex((track: { url: string; }) => track.url === selectedTrack.url);
+            if (trackIndex === -1) { return; }
 
-        const isChangingQueue = id !== activeQueueId;
+            const isChangingQueue = id !== activeQueueId;
+            if (isChangingQueue) {
+                const beforeTrack = tracks.slice(0, trackIndex);
+                const afterTrack = tracks.slice(trackIndex + 1);
+                await TrackPlayer.reset();
 
-        if (isChangingQueue) {
-            const beforeTrack = allSongs.slice(0, trackIndex);
-            const afterTrack = allSongs.slice(trackIndex + 1);
-            await TrackPlayer.reset();
+                await TrackPlayer.add(selectedTrack);
+                await TrackPlayer.add(afterTrack);
+                await TrackPlayer.add(beforeTrack);
 
-            await TrackPlayer.add(selectedTrack);
-            await TrackPlayer.add(afterTrack);
-            await TrackPlayer.add(beforeTrack);
+                if (playing) {
+                    await TrackPlayer.pause();
+                } else {
+                    await TrackPlayer.play();
+                }
 
-            if (playing) {
-                await TrackPlayer.pause();
+                queueOffset.current = trackIndex;
+                setActiveQueuedId(id);
+
             } else {
-                await TrackPlayer.play();
+
+                const nextTrackIndex = trackIndex - queueOffset.current < 0 ? tracks.length + trackIndex - queueOffset.current
+                    : trackIndex - queueOffset.current;
+                await TrackPlayer.skip(nextTrackIndex);
+                if (playing) {
+                    await TrackPlayer.pause();
+                } else {
+                    await TrackPlayer.play();
+                }
             }
-
-            queueOffset.current = trackIndex;
-            setActiveQueuedId(id);
-
-        } else {
-
-            const nextTrackIndex = trackIndex - queueOffset.current < 0 ? allSongs.length + trackIndex - queueOffset.current
-                : trackIndex - queueOffset.current;
-            await TrackPlayer.skip(nextTrackIndex);
-            if (playing) {
-                await TrackPlayer.pause();
-            } else {
-                await TrackPlayer.play();
-            }
-        }
-    };
+        };
 
     return (
         <View style={styles.container}>
@@ -103,9 +119,9 @@ const PlaylistsDetailsScreen: React.FC<DetailsScreenProps> = ({ route }) => {
                     onChangeText={onChangeSearch}
                 />
             </View>
-            <FlatList data={allSongs}
-                keyExtractor={(item) => item.track.id}
-                renderItem={({ item: track }) => (<PlaylistTracklistItem track={track.track} selectedTrack={handleTrack} />)} />
+            <FlatList data={filteredTracks}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item: track }) => (<PlaylistTracklistItem track={track} selectedTrack={handleTrack} />)} />
         </View>
     );
 };

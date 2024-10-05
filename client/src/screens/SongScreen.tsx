@@ -3,23 +3,29 @@ import TrackList from '../components/TrackList';
 import { View, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native';
 import { Colors } from '../constants/colors';
-import { Track } from 'react-native-track-player';
+//import { Track } from 'react-native-track-player';
 import { Searchbar } from 'react-native-paper';
 import axios from 'axios';
 
-
+interface Track {
+    id: string;
+    title: string;
+    artist: string;
+    artwork: string;
+    url: string;
+    createdAt: string;
+    duration: number;
+  }
 const SongsScreen = () => {
     const [searchText, setSearchText] = useState('');
     const [filteredTracks, setFilteredTracks] = useState<Track[]>([]);
-    const onChangeSearch = (text: React.SetStateAction<string>) => setSearchText(text);
-    const [tracks, setTracks] = useState([]);
+
+    const [tracks, setTracks] = useState<Track[]>([]);
 
     useEffect(() => {
         const getUserPlaylist = async () => {
             try {
                 const response = await axios.get('https://musicserver-h836.onrender.com/track');
-                //http://192.168.1.10:3000/track for phical device
-                //http://10.0.2.2:3000/track for emulator
                 setTracks(response.data);
             } catch (error) {
                 console.log('error getting tracks', error);
@@ -27,6 +33,7 @@ const SongsScreen = () => {
         };
         getUserPlaylist();
     }, []);
+    const onChangeSearch = (text: React.SetStateAction<string>) => setSearchText(text);
     useEffect(() => {
         if (!searchText) { setFilteredTracks(tracks); }
         else {
