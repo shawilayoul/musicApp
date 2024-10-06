@@ -1,9 +1,10 @@
-import React, { useRef } from 'react';
+import React, { useRef} from 'react';
 import { FlatList, FlatListProps, Text, StyleSheet } from 'react-native';
 import TrackListItems from './TrackListItems';
 import TrackPlayer, { useIsPlaying, Track } from 'react-native-track-player';
 import { usePlayerContext } from '../store/trackPlayerContext';
 import { View } from 'react-native';
+
 
 export type TrackListType = Partial<FlatListProps<Track>> & {
     tracks: Track[],
@@ -13,7 +14,7 @@ const TrackList = ({ tracks }: TrackListType) => {
     const queueOffset = useRef(0);
     const { activeQueueId, setActiveQueuedId } = usePlayerContext();
     const { playing } = useIsPlaying();
-
+  
     const handleTrack = async (selectedTrack: Track) => {
         const id = 'allsongs';
 
@@ -62,7 +63,7 @@ const TrackList = ({ tracks }: TrackListType) => {
             showsVerticalScrollIndicator={false}
             data={tracks}
             keyExtractor={(item) => item.id}
-            renderItem={({ item: track }) => (<TrackListItems track={track} selectedTrack={handleTrack} />)} />
+            renderItem={({ item: track }) => (<TrackListItems track={track} selectedTrack={handleTrack}/>)} />
     );
 };
 

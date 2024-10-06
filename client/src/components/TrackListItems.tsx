@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Image, Text, View, StyleSheet, Pressable } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Image, Text, View, StyleSheet, Pressable, TouchableOpacity } from 'react-native';
 import { imageUrl } from '../assests/data/track';
 import TrackPlayer, { Event, useIsPlaying, useTrackPlayerEvents, Track } from 'react-native-track-player';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../constants/colors';
-import { usePlayerContext } from '../store/trackPlayerContext';
+import axios from 'axios';
 
 type TrackPlayerListType = {
     track: Track,
@@ -13,19 +13,45 @@ type TrackPlayerListType = {
 const TrackListItems = ({ track, selectedTrack }: TrackPlayerListType) => {
     const [currentTrackId, setCurrentTrackId] = useState(null);
     const { playing } = useIsPlaying();
-    const { addFavorite, removeFavorites, isFavrite } = usePlayerContext();
+    const [isLiked, setIsLiked] = useState(false);
+    useEffect(() => {
+        const trackLikedByUser = async () => {
+            try {
+                const response = await axios.get('https://musicserver-h836.onrender.com/user/66fc66651c032413823ea923/likedTrack');
+                // Assuming response.data is an array of liked track objects
+                const likedTrackIds = response.data.map((track: { id: string; }) => track.id); // Extract the IDs
+
+                if (likedTrackIds.includes(track?.id)) {
+                    setIsLiked(true);
+                }
+            }
+            catch (error) {
+                console.log('Error fetching liked status', error);
+            }
+        };
+        trackLikedByUser();
+    }, [track?.id]);
+
+
 
     // handeling favorites fuctionalities
-    const toggleFavorites = () => {
-        if (!isFavrite(track?.id)) {
-            addFavorite(track?.id);
-        } else {
-            if (isFavrite(track?.id)) {
-                removeFavorites(track?.id);
+    const toggleFavorites = async () => {
+
+        try {
+            const newLikedStatus = !isLiked;
+            setIsLiked(newLikedStatus);
+            if (newLikedStatus) {
+                await axios.post(`https://musicserver-h836.onrender.com/user/66fc66651c032413823ea923/like/${track?.id}`);
+            } else {
+                await axios.delete(`https://musicserver-h836.onrender.com/user/66fc66651c032413823ea923/unlike/${track?.id}`);
             }
+        } catch (error) {
+            console.error('Error toggling like status', error);
+            setIsLiked(!isLiked);
         }
     };
 
+    //console.log(isliked)
     useTrackPlayerEvents([Event.PlaybackActiveTrackChanged], async (event) => {
         if (event.index != null) {
             const trackId = await TrackPlayer.getTrack(event.index);
@@ -44,9 +70,12 @@ const TrackListItems = ({ track, selectedTrack }: TrackPlayerListType) => {
                 </View>
             </View>
             <View style={styles.playIcon}>
-                <Icon name="heart"
-                    size={25}
-                    color={isFavrite(track?.id) ? Colors.activeTitle : Colors.gray} onPress={() => toggleFavorites()} />
+                <TouchableOpacity onPress={toggleFavorites}>
+                    <Icon name="heart"
+                        size={25}
+                        color={isLiked ? Colors.activeTitle : Colors.gray} />
+                </TouchableOpacity>
+
                 <Icon
                     name={(isPlaying && playing) ? 'pause' : 'play'} // Change icon based on play/pause state
                     size={25}

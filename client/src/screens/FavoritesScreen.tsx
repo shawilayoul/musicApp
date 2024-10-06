@@ -1,26 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
-import tracks from '../assests/data/track';
 import { Colors } from '../constants/colors';
 import { Searchbar } from 'react-native-paper';
-import { usePlayerContext } from '../store/trackPlayerContext';
 import { Track } from 'react-native-track-player';
 import FavoritesTrackList from '../components/FavoritesTrackList';
+import axios from 'axios';
 const FavoritesScreen = () => {
     const [searchText, setSearchText] = useState('');
     const [filteredTracks, setFilteredTracks] = useState<Track[]>([]);
+    const [likedtracks, setLikedTracks] = useState<Track[]>([]);
 
-    const { favorites } = usePlayerContext();
-    const favoritesTrack = filteredTracks.filter(track => favorites?.includes(track?.id));
     const onChangeSearch = (text: React.SetStateAction<string>) => setSearchText(text);
 
     useEffect(() => {
-        if (!searchText) { setFilteredTracks(tracks); }
+        const trackLikedByUser = async () => {
+            const response = await axios.get('https://musicserver-h836.onrender.com/user/66fc66651c032413823ea923/likedTrack');
+            setLikedTracks(response.data);
+        };
+        trackLikedByUser();
+    }, []);
+
+    useEffect(() => {
+        if (!searchText) { setFilteredTracks(likedtracks); }
         else {
-            const filtered = tracks.filter((track) => track.title?.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()));
+            const filtered = likedtracks.filter((track) => track.title?.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()));
             setFilteredTracks(filtered);
         }
-    }, [searchText]);
+    }, [likedtracks, searchText]);
+
+
     return (
         <SafeAreaView>
             <View style={styles.container}>
@@ -31,7 +39,7 @@ const FavoritesScreen = () => {
                     onChangeText={onChangeSearch}
                 />
             </View>
-            <View><View><FavoritesTrackList tracks={favoritesTrack} /></View></View>
+            <View><View><FavoritesTrackList tracks={filteredTracks} /></View></View>
         </SafeAreaView>
     );
 };
