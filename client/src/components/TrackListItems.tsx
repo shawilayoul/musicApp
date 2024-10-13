@@ -3,7 +3,6 @@ import { Image, Text, View, StyleSheet, Pressable, TouchableOpacity } from 'reac
 import { imageUrl } from '../assests/data/track';
 import TrackPlayer, { Event, useIsPlaying, useTrackPlayerEvents } from 'react-native-track-player';
 import Icon from 'react-native-vector-icons/Ionicons';
-//import Icon from 'react-native-vector-icons/FontAwesome';
 import { Colors } from '../constants/colors';
 import axios from 'axios';
 import { usePlayerContext } from '../store/trackPlayerContext';
@@ -12,12 +11,14 @@ import { Track } from '../store/trackPlayerContext';
 type TrackPlayerListType = {
     track: Track,
     selectedTrack: (track: Track) => void;
-    addFavorite: (track: Track) => void;
+    setFavorites: (track: Track[]) => void;
 };
 const TrackListItems = ({ track, selectedTrack }: TrackPlayerListType) => {
     const [currentTrackId, setCurrentTrackId] = useState(null);
     const { playing } = useIsPlaying();
+
     const [isLiked, setIsLiked] = useState(false);
+    const {  setFavorites } = usePlayerContext();
 
     useEffect(() => {
         const trackLikedByUser = async () => {
@@ -37,12 +38,9 @@ const TrackListItems = ({ track, selectedTrack }: TrackPlayerListType) => {
         trackLikedByUser();
     }, [track?.id]);
 
-    const { setFavorites} = usePlayerContext();
 
-
-    // handeling favorites fuctionalities
-    const toggleFavorites = async () => {
-
+       // handeling favorites fuctionalities
+       const toggleFavorites = async () => {
         try {
             const newLikedStatus = !isLiked;
             setIsLiked(newLikedStatus);
@@ -60,7 +58,6 @@ const TrackListItems = ({ track, selectedTrack }: TrackPlayerListType) => {
             setIsLiked(!isLiked);
         }
     };
-
     //console.log(isliked)
     useTrackPlayerEvents([Event.PlaybackActiveTrackChanged], async (event) => {
         if (event.index != null) {
@@ -82,12 +79,12 @@ const TrackListItems = ({ track, selectedTrack }: TrackPlayerListType) => {
             <View style={styles.playIcon}>
                 <TouchableOpacity onPress={toggleFavorites}>
                     <Icon name={isLiked ? 'heart' : 'heart'}
-                        size={25}
+                        size={20}
                         color={isLiked ? Colors.activeTitle : Colors.gray} />
                 </TouchableOpacity>
                 <Icon
                     name={(isPlaying && playing) ? 'pause' : 'play'} // Change icon based on play/pause state
-                    size={25}
+                    size={20}
                     color={(isPlaying && playing) ? Colors.activeTitle : Colors.icon} // Color based on state
                 />
             </View>

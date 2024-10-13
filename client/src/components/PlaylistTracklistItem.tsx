@@ -11,7 +11,7 @@ import { Track } from '../store/trackPlayerContext';
 type TrackPlayerListType = {
     track: Track,
     selectedTrack: (id: string, track: Track) => void;
-    setFavorites: (track: Track) => void;
+    setFavorites: (track: Track[]) => void;
 };
 
 const PlaylistTracklistItem = ({ track, selectedTrack }: TrackPlayerListType) => {
@@ -85,12 +85,12 @@ const PlaylistTracklistItem = ({ track, selectedTrack }: TrackPlayerListType) =>
             <View style={styles.playIcon}>
                 <TouchableOpacity onPress={toggleFavorites}>
                     <Icon name={isLiked ? 'heart' : 'heart'}
-                        size={25}
+                        size={20}
                         color={isLiked ? Colors.activeTitle : Colors.gray} />
                 </TouchableOpacity>
                 <Icon
                     name={(isPlaying && playing) ? 'pause' : 'play'} // Change icon based on play/pause state
-                    size={25}
+                    size={20}
                     color={(isPlaying && playing) ? Colors.activeTitle : Colors.icon} // Color based on state
                 />
             </View>

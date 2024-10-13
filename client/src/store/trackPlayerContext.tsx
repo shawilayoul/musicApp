@@ -26,12 +26,11 @@ export default function PlayerProvider({ children }: { children: React.ReactNode
     const [activeQueueId, setActiveQueuedId] = useState('');
     const [favorites, setFavorites] = useState<Track[]>([]);
 
-
     const value = {
         activeQueueId,
         setActiveQueuedId,
         favorites,
-        setFavorites,   // Ensure setFavorite is passed
+        setFavorites,
     };
     return (
         // eslint-disable-next-line react/react-in-jsx-scope

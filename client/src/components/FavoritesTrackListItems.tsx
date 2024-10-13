@@ -57,12 +57,12 @@ const FavoritesTrackListItems = ({ track, selectedTrack }: TrackPlayerListType) 
             <View style={styles.playIcon}>
                 <TouchableOpacity onPress={toggleFavorites}>
                     <Icon name="heart"
-                        size={30}
+                        size={20}
                         color={Colors.activeTitle} />
                 </TouchableOpacity>
                 <Icon
                     name={(isPlaying && playing) ? 'pause' : 'play'} // Change icon based on play/pause state
-                    size={30}
+                    size={20}
                     color={(isPlaying && playing) ? Colors.activeTitle : Colors.icon} // Color based on state
                 />
             </View>
