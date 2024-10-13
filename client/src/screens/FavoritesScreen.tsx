@@ -5,28 +5,30 @@ import { Searchbar } from 'react-native-paper';
 import { Track } from 'react-native-track-player';
 import FavoritesTrackList from '../components/FavoritesTrackList';
 import axios from 'axios';
+import { usePlayerContext } from '../store/trackPlayerContext';
 const FavoritesScreen = () => {
     const [searchText, setSearchText] = useState('');
     const [filteredTracks, setFilteredTracks] = useState<Track[]>([]);
-    const [likedtracks, setLikedTracks] = useState<Track[]>([]);
 
     const onChangeSearch = (text: React.SetStateAction<string>) => setSearchText(text);
+
+    const { favorites, setFavorites } = usePlayerContext();
 
     useEffect(() => {
         const trackLikedByUser = async () => {
             const response = await axios.get('https://musicserver-h836.onrender.com/user/66fc66651c032413823ea923/likedTrack');
-            setLikedTracks(response.data);
+            setFavorites(response.data);
         };
         trackLikedByUser();
-    }, []);
+    }, [setFavorites]);
 
     useEffect(() => {
-        if (!searchText) { setFilteredTracks(likedtracks); }
+        if (!searchText) { setFilteredTracks(favorites); }
         else {
-            const filtered = likedtracks.filter((track) => track.title?.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()));
+            const filtered = favorites.filter((track) => track.title?.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()));
             setFilteredTracks(filtered);
         }
-    }, [likedtracks, searchText]);
+    }, [favorites, searchText]);
 
 
     return (

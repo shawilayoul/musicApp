@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { Image, Text, View, StyleSheet, Pressable, TouchableOpacity } from 'react-native';
 import { imageUrl } from '../assests/data/track';
-import TrackPlayer, { Event, useIsPlaying, useTrackPlayerEvents, Track } from 'react-native-track-player';
+import TrackPlayer, { Event, useIsPlaying, useTrackPlayerEvents } from 'react-native-track-player';
 import Icon from 'react-native-vector-icons/Ionicons';
+//import Icon from 'react-native-vector-icons/FontAwesome';
 import { Colors } from '../constants/colors';
 import axios from 'axios';
+import { usePlayerContext } from '../store/trackPlayerContext';
+import { Track } from '../store/trackPlayerContext';
 
 type TrackPlayerListType = {
     track: Track,
     selectedTrack: (track: Track) => void;
+    addFavorite: (track: Track) => void;
 };
 const TrackListItems = ({ track, selectedTrack }: TrackPlayerListType) => {
     const [currentTrackId, setCurrentTrackId] = useState(null);
     const { playing } = useIsPlaying();
     const [isLiked, setIsLiked] = useState(false);
+
     useEffect(() => {
         const trackLikedByUser = async () => {
             try {
@@ -32,6 +37,7 @@ const TrackListItems = ({ track, selectedTrack }: TrackPlayerListType) => {
         trackLikedByUser();
     }, [track?.id]);
 
+    const { setFavorites} = usePlayerContext();
 
 
     // handeling favorites fuctionalities
@@ -42,8 +48,12 @@ const TrackListItems = ({ track, selectedTrack }: TrackPlayerListType) => {
             setIsLiked(newLikedStatus);
             if (newLikedStatus) {
                 await axios.post(`https://musicserver-h836.onrender.com/user/66fc66651c032413823ea923/like/${track?.id}`);
+                // Add the track to the state immediately
+                setFavorites((prevLikedTracks) => [...prevLikedTracks, track]);
             } else {
                 await axios.delete(`https://musicserver-h836.onrender.com/user/66fc66651c032413823ea923/unlike/${track?.id}`);
+                setFavorites((prevLikedTracks) => prevLikedTracks.filter((t) => t.id !== track.id));
+
             }
         } catch (error) {
             console.error('Error toggling like status', error);
@@ -71,11 +81,10 @@ const TrackListItems = ({ track, selectedTrack }: TrackPlayerListType) => {
             </View>
             <View style={styles.playIcon}>
                 <TouchableOpacity onPress={toggleFavorites}>
-                    <Icon name="heart"
+                    <Icon name={isLiked ? 'heart' : 'heart'}
                         size={25}
                         color={isLiked ? Colors.activeTitle : Colors.gray} />
                 </TouchableOpacity>
-
                 <Icon
                     name={(isPlaying && playing) ? 'pause' : 'play'} // Change icon based on play/pause state
                     size={25}

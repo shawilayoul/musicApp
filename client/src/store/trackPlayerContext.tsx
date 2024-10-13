@@ -1,6 +1,7 @@
-import { createContext, PropsWithChildren, useContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 
-interface Track {
+export interface Track {
+    some(arg0: (fav: any) => boolean): unknown;
     id: string;
     title: string;
     artist: string;
@@ -10,23 +11,31 @@ interface Track {
     duration: number;
 }
 type PlayerProiderType = {
-    track?: Track,
-    setTrack: (track: Track) => void,
     activeQueueId?: string | null
     setActiveQueuedId: (id: string) => void,
+    favorites: Track[]; // Add favorites property of type array of Track
+    setFavorites: (tracks: Track[]) => void;
 };
 const playerContext = createContext<PlayerProiderType>({
-    setTrack: () => { },
     setActiveQueuedId: () => { },
+    setFavorites: () => { },
+    favorites: [],
 });
 
-export default function PlayerProvider({ children }: PropsWithChildren) {
+export default function PlayerProvider({ children }: { children: React.ReactNode }) {
     const [activeQueueId, setActiveQueuedId] = useState('');
-    const [track, setTrack] = useState<Track>();
+    const [favorites, setFavorites] = useState<Track[]>([]);
 
+
+    const value = {
+        activeQueueId,
+        setActiveQueuedId,
+        favorites,
+        setFavorites,   // Ensure setFavorite is passed
+    };
     return (
         // eslint-disable-next-line react/react-in-jsx-scope
-        <playerContext.Provider value={{ track, setTrack, activeQueueId, setActiveQueuedId }}>
+        <playerContext.Provider value={value}>
             {children}
         </playerContext.Provider>
     );

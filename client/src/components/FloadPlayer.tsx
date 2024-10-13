@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   imageContainer: {
-    marginLeft: 20,
+    marginLeft: 0,
   },
   image: {
     width: 55,

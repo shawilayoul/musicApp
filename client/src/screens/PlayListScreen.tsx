@@ -5,11 +5,10 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Searchbar, Text } from 'react-native-paper';
 import { RootStackParamList } from '../navigations/StackNavigation';
-//import { Track } from 'react-native-track-player';
 import Icon from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
 import { imageUrl } from '../assests/data/track';
-//import { playlists } from '../assests/data/track';
+
 
 type PlaylistscreenProp = StackNavigationProp<RootStackParamList, 'StackNavigation'>;
 interface PlaylistType {
@@ -86,7 +85,7 @@ const styles = StyleSheet.create({
     container: {
         width: '95%',
         margin: 'auto',
-        marginVertical: 10,
+        marginVertical: 5,
     },
     searchContainer: {
         marginVertical: 5,

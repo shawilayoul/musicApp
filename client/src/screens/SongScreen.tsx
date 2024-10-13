@@ -3,19 +3,10 @@ import TrackList from '../components/TrackList';
 import { View, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native';
 import { Colors } from '../constants/colors';
-//import { Track } from 'react-native-track-player';
 import { Searchbar } from 'react-native-paper';
 import axios from 'axios';
+import { Track } from '../store/trackPlayerContext';
 
-interface Track {
-    id: string;
-    title: string;
-    artist: string;
-    artwork: string;
-    url: string;
-    createdAt: string;
-    duration: number;
-  }
 const SongsScreen = () => {
     const [searchText, setSearchText] = useState('');
     const [filteredTracks, setFilteredTracks] = useState<Track[]>([]);
