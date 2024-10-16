@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -39,6 +47,14 @@ export class UserController {
     return this.userService.addLikedTrack(userId, trackId);
   }
 
+  // add liked tracks by user
+  @Delete(':userId/unlike/:trackId')
+  async deleteLikedTrack(
+    @Param('userId') userId: string,
+    @Param('trackId') trackId: string,
+  ) {
+    return this.userService.deleteLikedTrack(userId, trackId);
+  }
   // det tacks like by user
   @Get(':userId/likedTrack')
   async getTracksLikedByUser(@Param('userId') userId: string) {

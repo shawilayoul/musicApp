@@ -75,6 +75,34 @@ export class UserService {
       },
     });
   }
+
+  // add track to a user's liked tracks
+
+  async deleteLikedTrack(userId: string, trackId: string) {
+    //check if user and track exist before attemting to create the join
+
+    const userExsits = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!userExsits) {
+      throw new Error(`user with Id ${userId} dose not exsit`);
+    }
+
+    const trackExsits = await this.prisma.track.findUnique({
+      where: { id: trackId },
+    });
+
+    if (!trackExsits) {
+      throw new Error(`track with ID ${trackId} dose not exsit`);
+    }
+    return this.prisma.likedTrack.deleteMany({
+      where: {
+        userId,
+        trackId,
+      },
+    });
+  }
   //get track like by the user
 
   async getTracksLikedByUser(userId: string) {

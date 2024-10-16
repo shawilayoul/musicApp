@@ -7,4 +7,4 @@ services:
     startCommand: npm run start:prod
     envVars:
       - key: DATABASE_URL
-        value: mongodb+srv://shawil:Shawil12!@cluster0.evltfnk.mongodb.net/fjuSongs?retryWrites=true&w=majority&appName=Cluster0
+        value:"mongodb+srv://shawil:Shawil12!@cluster0.evltfnk.mongodb.net/fjuSongs?retryWrites=true&w=majority&appName=Cluster0"
