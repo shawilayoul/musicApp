@@ -7,7 +7,8 @@ import { Searchbar, Text } from 'react-native-paper';
 import { RootStackParamList } from '../navigations/StackNavigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
-import { imageUrl } from '../assests/data/track';
+import { playlistImage } from '../assests/data/track';
+import UseSearchHook from '../hooks/UseSearchHook';
 
 
 type PlaylistscreenProp = StackNavigationProp<RootStackParamList, 'StackNavigation'>;
@@ -15,7 +16,7 @@ interface PlaylistType {
     url: string;
     id: string;
     name: string;
-  }
+}
 const PlayListScreen: React.FC = () => {
     const [searchText, setSearchText] = useState('');
     const [filteredTracks, setFilteredTracks] = useState<PlaylistType[]>([]);
@@ -24,17 +25,17 @@ const PlayListScreen: React.FC = () => {
 
     const [userPlaylist, setUserPlaylist] = useState<PlaylistType[]>([]);
 
-  useEffect(() => {
-    const getUserPlaylist = async () => {
-      try {
-        const response = await axios.get('https://musicserver-h836.onrender.com/playlist/66fc66651c032413823ea923');
-        setUserPlaylist(response.data);
-      } catch (error) {
-        console.log('error getting user platlist', error);
-      }
-    };
-    getUserPlaylist();
-  }, []);
+    useEffect(() => {
+        const getUserPlaylist = async () => {
+            try {
+                const response = await axios.get('https://musicserver-h836.onrender.com/playlist/66fc66651c032413823ea923');
+                setUserPlaylist(response.data);
+            } catch (error) {
+                console.log('error getting user platlist', error);
+            }
+        };
+        getUserPlaylist();
+    }, []);
     const onChangeSearch = (text: React.SetStateAction<string>) => setSearchText(text);
     useEffect(() => {
         if (!searchText) { setFilteredTracks(userPlaylist); }
@@ -54,22 +55,15 @@ const PlayListScreen: React.FC = () => {
         });
     };
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.searchContainer}>
-                <Searchbar
-                    placeholder="search by playList name ...."
-                    value={searchText}
-                    style={styles.searchBar}
-                    onChangeText={onChangeSearch}
-                />
-            </View>
-            <FlatList data={filteredTracks} keyExtractor={(item) => item.id}
+        <SafeAreaView >
+            <UseSearchHook searchText={searchText} onChangeSearch={onChangeSearch} />
+            <FlatList style={styles.container} data={filteredTracks} keyExtractor={(item) => item.id}
                 renderItem={({ item }) =>
                     <TouchableOpacity
                         onPress={() => goToplaylistDetain(item.id, item.name)}>
-                        <View style={styles.playlist}>
-                            <View style={styles.playlistImage}>
-                                <Image source={{ uri: item.url || imageUrl}} width={50} height={50} />
+                        <View style={styles.playlistItem}>
+                            <View style={styles.items}>
+                                <Image source={{ uri: item.url || playlistImage }} style={styles.playlistImage} />
                                 <Text style={styles.platlistTitle}>{item.name}</Text>
                             </View>
                             <Icon name="chevron-forward-sharp" size={30} />
@@ -87,10 +81,12 @@ const styles = StyleSheet.create({
         margin: 'auto',
         marginVertical: 5,
     },
-    searchContainer: {
-        marginVertical: 5,
+    platlistTitle: {
+        fontSize: 18,
+        fontWeight: '600',
+        textTransform: 'uppercase'
     },
-    playlist: {
+    playlistItem: {
         display: 'flex',
         color: 'white',
         padding: 5,
@@ -101,19 +97,16 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         gap: 20,
         backgroundColor: 'white',
-        paddingVertical: 20,
+        paddingVertical: 5,
     },
-    playlistImage: {
+    items: {
         alignItems: 'center',
         flexDirection: 'row',
         gap: 10,
     },
-    searchBar: {
+    playlistImage: {
         borderRadius: 10,
-        backgroundColor: Colors.lightblue,
-    },
-    platlistTitle: {
-        fontSize: 20,
-        fontWeight:'600',
+        height: 80,
+        width: 80,
     },
 });

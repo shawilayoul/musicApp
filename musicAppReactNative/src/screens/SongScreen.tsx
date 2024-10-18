@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import TrackList from '../components/TrackList';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { SafeAreaView } from 'react-native';
-import { Colors } from '../constants/colors';
-import { Searchbar } from 'react-native-paper';
 import axios from 'axios';
 import { Track } from '../store/trackPlayerContext';
+import TrackPlayer, { useIsPlaying } from 'react-native-track-player';
+import UsePlayll from '../hooks/UsePlayll';
+import UseSearchHook from '../hooks/UseSearchHook';
 
 const SongsScreen = () => {
     const [searchText, setSearchText] = useState('');
     const [filteredTracks, setFilteredTracks] = useState<Track[]>([]);
 
+    const { playing } = useIsPlaying();
     const [tracks, setTracks] = useState<Track[]>([]);
-
     useEffect(() => {
         const getUserPlaylist = async () => {
             try {
@@ -24,7 +25,22 @@ const SongsScreen = () => {
         };
         getUserPlaylist();
     }, []);
+
+    // play all
+    const playAll = async () => {
+
+        await TrackPlayer.reset();
+
+        await TrackPlayer.add(tracks);
+        if (playing) {
+            await TrackPlayer.pause();
+        } else {
+            await TrackPlayer.play();
+        }
+    };
+
     const onChangeSearch = (text: React.SetStateAction<string>) => setSearchText(text);
+
     useEffect(() => {
         if (!searchText) { setFilteredTracks(tracks); }
         else {
@@ -35,14 +51,8 @@ const SongsScreen = () => {
 
     return (
         <SafeAreaView>
-            <View style={styles.container}>
-                <Searchbar
-                    placeholder="search by song title ...."
-                    value={searchText}
-                    style={styles.searchBar}
-                    onChangeText={onChangeSearch}
-                />
-            </View>
+            <UseSearchHook searchText={searchText} onChangeSearch={onChangeSearch} />
+            <UsePlayll playAll={playAll} playing={playing} />
             <View>
                 <TrackList tracks={filteredTracks} />
             </View>
@@ -50,13 +60,4 @@ const SongsScreen = () => {
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        padding: 10,
-    },
-    searchBar: {
-        borderRadius: 10,
-        backgroundColor: Colors.lightblue,
-    },
-});
 export default SongsScreen;

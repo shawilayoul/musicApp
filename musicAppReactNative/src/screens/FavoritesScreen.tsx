@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
-import { Colors } from '../constants/colors';
-import { Searchbar } from 'react-native-paper';
-import { Track } from 'react-native-track-player';
+import { SafeAreaView,View } from 'react-native';
+import TrackPlayer, { Track, useIsPlaying } from 'react-native-track-player';
 import FavoritesTrackList from '../components/FavoritesTrackList';
 import axios from 'axios';
 import { usePlayerContext } from '../store/trackPlayerContext';
+import UsePlayll from '../hooks/UsePlayll';
+import UseSearchHook from '../hooks/UseSearchHook';
+
 const FavoritesScreen = () => {
     const [searchText, setSearchText] = useState('');
     const [filteredTracks, setFilteredTracks] = useState<Track[]>([]);
-
+    const { playing } = useIsPlaying();
     const onChangeSearch = (text: React.SetStateAction<string>) => setSearchText(text);
 
     const { favorites, setFavorites } = usePlayerContext();
@@ -30,29 +31,26 @@ const FavoritesScreen = () => {
         }
     }, [favorites, searchText]);
 
+    // play all
+    const playAll = async () => {
+
+        await TrackPlayer.reset();
+
+        await TrackPlayer.add(favorites);
+        if (playing) {
+            await TrackPlayer.pause();
+        } else {
+            await TrackPlayer.play();
+        }
+    };
 
     return (
         <SafeAreaView>
-            <View style={styles.container}>
-                <Searchbar
-                    placeholder="search by song title ...."
-                    value={searchText}
-                    style={styles.searchBar}
-                    onChangeText={onChangeSearch}
-                />
-            </View>
+            <UseSearchHook searchText={searchText} onChangeSearch={onChangeSearch} />
+            <UsePlayll playAll={playAll} playing={playing} />
             <View><View><FavoritesTrackList tracks={filteredTracks} /></View></View>
         </SafeAreaView>
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        padding: 10,
-    },
-    searchBar: {
-        borderRadius: 10,
-        backgroundColor: Colors.lightblue,
-    },
-});
 export default FavoritesScreen;

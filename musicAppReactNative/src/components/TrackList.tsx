@@ -4,8 +4,8 @@ import TrackListItems from './TrackListItems';
 import TrackPlayer, { useIsPlaying } from 'react-native-track-player';
 import { usePlayerContext } from '../store/trackPlayerContext';
 import { View } from 'react-native';
-
 import { Track } from '../store/trackPlayerContext';
+
 export type TrackListType = Partial<FlatListProps<Track>> & {
     tracks: Track[],
 }

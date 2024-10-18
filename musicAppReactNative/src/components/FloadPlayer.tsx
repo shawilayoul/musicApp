@@ -40,7 +40,7 @@ const FloadPlayer: React.FC = () => {
           <Icon
             name={playing ? 'pause-circle' : 'play-circle'}
             size={60}
-            color={Colors.icon}
+            color={playing ? Colors.activeTitle : Colors.icon}
           />
         </TouchableOpacity>
         <TouchableOpacity onPress={skipToNext}>

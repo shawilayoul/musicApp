@@ -6,10 +6,12 @@ import { RootStackParamList } from '../navigations/StackNavigation';
 //import { playlistsongs } from '../assests/data/track';
 import TrackPlayer, { useIsPlaying } from 'react-native-track-player';
 import { Colors } from '../constants/colors';
-import { usePlayerContext } from '../store/trackPlayerContext';
+import { Track, usePlayerContext } from '../store/trackPlayerContext';
 import PlaylistTracklistItem from './PlaylistTracklistItem';
 import { Searchbar } from 'react-native-paper';
 import axios from 'axios';
+import UsePlayll from '../hooks/UsePlayll';
+import UseSearchHook from '../hooks/UseSearchHook';
 
 type DetailsScreenNavigationProp = StackNavigationProp<RootStackParamList, 'PlaylistsDetailsScreen'>;
 type DetailsScreenRouteProp = RouteProp<RootStackParamList, 'PlaylistsDetailsScreen'>;
@@ -18,16 +20,6 @@ type DetailsScreenProps = {
     navigation: DetailsScreenNavigationProp;
     route: DetailsScreenRouteProp;
 };
-
-interface Track {
-    id: string;
-    title: string;
-    artist: string;
-    artwork: string;
-    url: string;
-    createdAt: string; // Ensure this matches the type that TypeScript expects
-    duration: number;
-  }
 
 const PlaylistsDetailsScreen: React.FC<DetailsScreenProps> = ({ route }) => {
     const { playing } = useIsPlaying();
@@ -38,10 +30,6 @@ const PlaylistsDetailsScreen: React.FC<DetailsScreenProps> = ({ route }) => {
     const [tracks, setAllSongs] = useState<Track[]>([]);
     const { playlistId, playlistName } = route.params;
 
-    //const allSongs = playlistsongs[playlistId];
-
-    // get track from array
-    //const tracks = allSongs.map((item) => item.track);
 
     //search functionality
     const onChangeSearch = (text: React.SetStateAction<string>) => setSearchText(text);
@@ -68,57 +56,65 @@ const PlaylistsDetailsScreen: React.FC<DetailsScreenProps> = ({ route }) => {
             setFilteredTracks(filtered);
         }
     }, [searchText, tracks]);
+    //play lll
+    const playAll = async () => {
+
+        await TrackPlayer.reset();
+
+        await TrackPlayer.add(tracks);
+        if (playing) {
+            await TrackPlayer.pause();
+        } else {
+            await TrackPlayer.play();
+        }
+    };
+
 
     type TrackHandler = (id: string, track: Track) => Promise<void>;
     const handleTrack: TrackHandler = async (id, selectedTrack) => {
-            const trackIndex = tracks.findIndex((track: { url: string; }) => track.url === selectedTrack.url);
-            if (trackIndex === -1) { return; }
+        const trackIndex = tracks.findIndex((track: { url: string; }) => track.url === selectedTrack.url);
+        if (trackIndex === -1) { return; }
 
-            const isChangingQueue = id !== activeQueueId;
-            if (isChangingQueue) {
-                const beforeTrack = tracks.slice(0, trackIndex);
-                const afterTrack = tracks.slice(trackIndex + 1);
-                await TrackPlayer.reset();
+        const isChangingQueue = id !== activeQueueId;
+        if (isChangingQueue) {
+            const beforeTrack = tracks.slice(0, trackIndex);
+            const afterTrack = tracks.slice(trackIndex + 1);
+            await TrackPlayer.reset();
 
-                await TrackPlayer.add(selectedTrack);
-                await TrackPlayer.add(afterTrack);
-                await TrackPlayer.add(beforeTrack);
+            await TrackPlayer.add(selectedTrack);
+            await TrackPlayer.add(afterTrack);
+            await TrackPlayer.add(beforeTrack);
 
-                if (playing) {
-                    await TrackPlayer.pause();
-                } else {
-                    await TrackPlayer.play();
-                }
-
-                queueOffset.current = trackIndex;
-                setActiveQueuedId(id);
-
+            if (playing) {
+                await TrackPlayer.pause();
             } else {
-
-                const nextTrackIndex = trackIndex - queueOffset.current < 0 ? tracks.length + trackIndex - queueOffset.current
-                    : trackIndex - queueOffset.current;
-                await TrackPlayer.skip(nextTrackIndex);
-                if (playing) {
-                    await TrackPlayer.pause();
-                } else {
-                    await TrackPlayer.play();
-                }
+                await TrackPlayer.play();
             }
-        };
+
+            queueOffset.current = trackIndex;
+            setActiveQueuedId(id);
+
+        } else {
+
+            const nextTrackIndex = trackIndex - queueOffset.current < 0 ? tracks.length + trackIndex - queueOffset.current
+                : trackIndex - queueOffset.current;
+            await TrackPlayer.skip(nextTrackIndex);
+            if (playing) {
+                await TrackPlayer.pause();
+            } else {
+                await TrackPlayer.play();
+            }
+        }
+    };
 
     return (
         <View style={styles.container}>
             <View style={styles.playlistNameContainer}>
                 <Text style={styles.playlistName}>{playlistName} Playlist</Text>
             </View>
-            <View style={styles.searchbarContainer}>
-                <Searchbar
-                    placeholder="search by song title ...."
-                    value={searchText}
-                    style={styles.searchBar}
-                    onChangeText={onChangeSearch}
-                />
-            </View>
+            <UseSearchHook searchText={searchText} onChangeSearch={onChangeSearch} />
+            <UsePlayll playAll={playAll} playing={playing} />
+
             <FlatList data={filteredTracks}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item: track }) => (<PlaylistTracklistItem track={track} selectedTrack={handleTrack} />)} />
@@ -138,17 +134,11 @@ const styles = StyleSheet.create({
     },
     playlistName: {
         color: Colors.title,
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: '600',
         marginVertical: 10,
         padding: 10,
-    },
-    searchbarContainer: {
-        padding: 10,
-    },
-    searchBar: {
-        borderRadius: 10,
-        backgroundColor: Colors.lightblue,
+        textTransform: 'uppercase',
     },
     playlistItemsContainer: {
         flexDirection: 'row',
