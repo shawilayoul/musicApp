@@ -2,8 +2,11 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import { Colors } from '../constants/colors';
-
-const UseSearchHook = ({ searchText, onChangeSearch }) => {
+interface Props {
+    searchText: string,
+    onChangeSearch: (text: string) => void
+}
+const UseSearchHook: React.FC<Props> = ({ searchText, onChangeSearch }) => {
     return (
         <View style={styles.container}>
             <Searchbar

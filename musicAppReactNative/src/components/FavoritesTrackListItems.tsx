@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Image, Text, View, StyleSheet, Pressable, TouchableOpacity } from 'react-native';
 import { imageUrl } from '../assests/data/track';
 import TrackPlayer, { Event, useIsPlaying, useTrackPlayerEvents, Track } from 'react-native-track-player';

@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, FlatList, TouchableOpacity, StyleSheet, View, Image } from 'react-native';
-import { Colors } from '../constants/colors';
+import { SafeAreaView, FlatList, TouchableOpacity, StyleSheet, View, Image, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Searchbar, Text } from 'react-native-paper';
 import { RootStackParamList } from '../navigations/StackNavigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
 import { playlistImage } from '../assests/data/track';
 import UseSearchHook from '../hooks/UseSearchHook';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 
 type PlaylistscreenProp = StackNavigationProp<RootStackParamList, 'StackNavigation'>;
@@ -22,7 +21,7 @@ const PlayListScreen: React.FC = () => {
     const [filteredTracks, setFilteredTracks] = useState<PlaylistType[]>([]);
 
     const navigation = useNavigation<PlaylistscreenProp>();
-
+    const [loading, setLoading] = useState(true);
     const [userPlaylist, setUserPlaylist] = useState<PlaylistType[]>([]);
 
     useEffect(() => {
@@ -32,6 +31,8 @@ const PlayListScreen: React.FC = () => {
                 setUserPlaylist(response.data);
             } catch (error) {
                 console.log('error getting user platlist', error);
+            } finally {
+                setLoading(false);
             }
         };
         getUserPlaylist();
@@ -54,10 +55,19 @@ const PlayListScreen: React.FC = () => {
             },
         });
     };
+    if (loading) {
+        return <View style={styles.loading}>
+            <LoadingSpinner />
+        </View>;
+    }
     return (
         <SafeAreaView >
             <UseSearchHook searchText={searchText} onChangeSearch={onChangeSearch} />
-            <FlatList style={styles.container} data={filteredTracks} keyExtractor={(item) => item.id}
+            <FlatList style={styles.container} ListEmptyComponent={
+                <View style={styles.notFount}>
+                    <Text>No PlayList Found</Text>
+                </View>
+            } data={filteredTracks} keyExtractor={(item) => item.id}
                 renderItem={({ item }) =>
                     <TouchableOpacity
                         onPress={() => goToplaylistDetain(item.id, item.name)}>
@@ -84,7 +94,7 @@ const styles = StyleSheet.create({
     platlistTitle: {
         fontSize: 18,
         fontWeight: '600',
-        textTransform: 'uppercase'
+        textTransform: 'uppercase',
     },
     playlistItem: {
         display: 'flex',
@@ -109,4 +119,12 @@ const styles = StyleSheet.create({
         height: 80,
         width: 80,
     },
+
+    notFount: {
+        alignItems: 'center',
+    },
+    loading: {
+        flex: 1,
+    },
+
 });

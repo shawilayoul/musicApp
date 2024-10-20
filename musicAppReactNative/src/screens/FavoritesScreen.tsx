@@ -1,24 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView,View } from 'react-native';
-import TrackPlayer, { Track, useIsPlaying } from 'react-native-track-player';
+import { SafeAreaView, View } from 'react-native';
+import TrackPlayer, { useIsPlaying } from 'react-native-track-player';
 import FavoritesTrackList from '../components/FavoritesTrackList';
 import axios from 'axios';
-import { usePlayerContext } from '../store/trackPlayerContext';
+import { Track, usePlayerContext } from '../store/trackPlayerContext';
 import UsePlayll from '../hooks/UsePlayll';
 import UseSearchHook from '../hooks/UseSearchHook';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const FavoritesScreen = () => {
     const [searchText, setSearchText] = useState('');
     const [filteredTracks, setFilteredTracks] = useState<Track[]>([]);
     const { playing } = useIsPlaying();
     const onChangeSearch = (text: React.SetStateAction<string>) => setSearchText(text);
-
+    const [loading, setLoading] = useState(true);
     const { favorites, setFavorites } = usePlayerContext();
 
     useEffect(() => {
         const trackLikedByUser = async () => {
-            const response = await axios.get('https://musicserver-h836.onrender.com/user/66fc66651c032413823ea923/likedTrack');
-            setFavorites(response.data);
+
+            try {
+                const response = await axios.get('https://musicserver-h836.onrender.com/user/66fc66651c032413823ea923/likedTrack');
+                setFavorites(response.data);
+            } catch (error) {
+                console.log('error getting tracks', error);
+            } finally {
+                setLoading(false);
+            }
         };
         trackLikedByUser();
     }, [setFavorites]);
@@ -43,11 +51,15 @@ const FavoritesScreen = () => {
             await TrackPlayer.play();
         }
     };
-
+    if (loading) {
+        return <View style={{ flex: 1 }}>
+            <LoadingSpinner />
+        </View>;
+    }
     return (
         <SafeAreaView>
             <UseSearchHook searchText={searchText} onChangeSearch={onChangeSearch} />
-            <UsePlayll playAll={playAll} playing={playing} />
+            <UsePlayll playAll={playAll} playing={playing} songs={filteredTracks} />
             <View><View><FavoritesTrackList tracks={filteredTracks} /></View></View>
         </SafeAreaView>
     );

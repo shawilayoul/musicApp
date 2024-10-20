@@ -3,11 +3,18 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Icon2 from 'react-native-vector-icons/FontAwesome';
 import React from 'react';
 import { Colors } from '../constants/colors';
+import { Track } from '../store/trackPlayerContext';
 
-const UsePlayll = ({playAll, playing}) => {
+interface Props {
+    playing?: boolean;
+    playAll: () => Promise<void>;
+    songs: Track[]
+}
+const UsePlayll: React.FC<Props> = ({ playAll, playing = false, songs }) => {
+    const total = songs.length;
     return (
         <View style={styles.playAllContainer}>
-            <Text>100 Tracks</Text>
+            <Text> {total} songs</Text>
             <TouchableOpacity style={styles.playAllIcons} onPress={playAll}>
                 <Icon2
                     name="random"

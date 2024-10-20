@@ -15,9 +15,8 @@ const TrackList = ({ tracks }: TrackListType) => {
     const { activeQueueId, setActiveQueuedId } = usePlayerContext();
     const { playing } = useIsPlaying();
 
-    const handleTrack = async (selectedTrack: Track) => {
-        const id = 'allsongs';
-
+    type TrackHandler = (id: string, track: Track) => Promise<void>;
+    const handleTrack:TrackHandler = async (id, selectedTrack: Track) => {
         const trackIndex = tracks.findIndex((track) => track.url === selectedTrack.url);
         if (trackIndex === -1) { return; }
 
@@ -63,9 +62,7 @@ const TrackList = ({ tracks }: TrackListType) => {
             showsVerticalScrollIndicator={false}
             data={tracks}
             keyExtractor={(item) => item.id}
-            renderItem={({ item: track }) => (<TrackListItems track={track} selectedTrack={handleTrack} addFavorite={function (track: Track): void {
-                throw new Error('Function not implemented.');
-            } } />)} />
+            renderItem={({ item: track }) => (<TrackListItems track={track} selectedTrack={handleTrack} />)} />
     );
 };
 

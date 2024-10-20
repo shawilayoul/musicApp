@@ -3,15 +3,15 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigations/StackNavigation';
-//import { playlistsongs } from '../assests/data/track';
 import TrackPlayer, { useIsPlaying } from 'react-native-track-player';
 import { Colors } from '../constants/colors';
 import { Track, usePlayerContext } from '../store/trackPlayerContext';
 import PlaylistTracklistItem from './PlaylistTracklistItem';
-import { Searchbar } from 'react-native-paper';
 import axios from 'axios';
 import UsePlayll from '../hooks/UsePlayll';
 import UseSearchHook from '../hooks/UseSearchHook';
+import LoadingSpinner from './LoadingSpinner';
+
 
 type DetailsScreenNavigationProp = StackNavigationProp<RootStackParamList, 'PlaylistsDetailsScreen'>;
 type DetailsScreenRouteProp = RouteProp<RootStackParamList, 'PlaylistsDetailsScreen'>;
@@ -30,7 +30,7 @@ const PlaylistsDetailsScreen: React.FC<DetailsScreenProps> = ({ route }) => {
     const [tracks, setAllSongs] = useState<Track[]>([]);
     const { playlistId, playlistName } = route.params;
 
-
+    const [loading, setLoading] = useState(true);
     //search functionality
     const onChangeSearch = (text: React.SetStateAction<string>) => setSearchText(text);
 
@@ -41,6 +41,8 @@ const PlaylistsDetailsScreen: React.FC<DetailsScreenProps> = ({ route }) => {
                 setAllSongs(response.data.tracks.map((item: { track: any; }) => item.track));
             } catch (error) {
                 console.log('error getting user platlist', error);
+            } finally {
+                setLoading(false);
             }
         };
         getUserPlaylist();
@@ -71,6 +73,7 @@ const PlaylistsDetailsScreen: React.FC<DetailsScreenProps> = ({ route }) => {
 
 
     type TrackHandler = (id: string, track: Track) => Promise<void>;
+
     const handleTrack: TrackHandler = async (id, selectedTrack) => {
         const trackIndex = tracks.findIndex((track: { url: string; }) => track.url === selectedTrack.url);
         if (trackIndex === -1) { return; }
@@ -106,16 +109,27 @@ const PlaylistsDetailsScreen: React.FC<DetailsScreenProps> = ({ route }) => {
             }
         }
     };
+    if (loading) {
+        return <View style={styles.loading}>
+            <LoadingSpinner />
+        </View>;
+    }
 
     return (
         <View style={styles.container}>
             <View style={styles.playlistNameContainer}>
-                <Text style={styles.playlistName}>{playlistName} Playlist</Text>
+                <Text style={styles.playlistName}>{playlistName}</Text>
             </View>
             <UseSearchHook searchText={searchText} onChangeSearch={onChangeSearch} />
-            <UsePlayll playAll={playAll} playing={playing} />
+            <UsePlayll playAll={playAll} playing={playing} songs={filteredTracks} />
 
-            <FlatList data={filteredTracks}
+            <FlatList
+                ListEmptyComponent={
+                    <View style={styles.notFount}>
+                        <Text>No songs Found</Text>
+                    </View>
+                }
+                data={filteredTracks}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item: track }) => (<PlaylistTracklistItem track={track} selectedTrack={handleTrack} />)} />
         </View>
@@ -160,5 +174,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignContent: 'center',
         gap: 10,
+    },
+    notFount: {
+        alignItems: 'center',
+    },
+    loading: {
+        flex: 1,
     },
 });
