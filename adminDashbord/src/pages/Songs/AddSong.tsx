@@ -14,9 +14,10 @@ const AddSong = () => {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('artist', artist);
-    formData.append('duration', duration);
     if (url) formData.append('files', url); // Assuming `url` is a file input
-    if (artwork) formData.append('files', artwork); // Assuming `artwork` is also a file input
+    if (artwork) formData.append('files', artwork);
+    formData.append('duration', duration);
+    // Assuming `artwork` is also a file input
 
 
     try {
@@ -40,6 +41,7 @@ const AddSong = () => {
   return (
     <div className="flex items-center flex-col p-2 gap-2 w-full">
       <h2 className="text-xl font-medium">Add Song</h2>
+      
       <form onSubmit={handelSubmit} className="bg-gray-100 shadow-md w-8/12 p-2 flex flex-col items-center gap-2">
         <div>
           <h3>Title</h3>
