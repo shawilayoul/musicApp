@@ -6,22 +6,35 @@ const AddSong = () => {
   const [title, setTitle] = useState("")
   const [artist, setArtist] = useState("")
   const [duration, setDuration] = useState(0)
-  const [artwork, setArtwork] = useState("")
-  const [url, setUrl] = useState("")
+  const [artwork, setArtwork] = useState<File | null>(null)
+  const [url, setUrl] = useState<File | null>(null)
 
   const handelSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('artist', artist);
+    formData.append('duration', duration);
+    if (url) formData.append('files', url); // Assuming `url` is a file input
+    if (artwork) formData.append('files', artwork); // Assuming `artwork` is also a file input
+
+
     try {
-      await axios.post('http://localhost:3000/track', { title, artist, url, artwork, duration })
+      const response = await axios.post('http://localhost:3000/track', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      console.log('Response:', response.data);
       toast.success('playlist created successfully')
       setTitle("")
-      //setArtist("")
-      //setDuration(0)
-      //setArtwork("")
-      setUrl("")
+      setArtist("")
+      setDuration(0)
+      setArtwork(null)
+      setUrl(null)
     } catch (error) {
-      toast.error('failed to add song: please try again')
-      console.log(error)
+      console.error('Error details:', error.response?.data || error.message);// Log response data for more context
+      toast.error('Failed to add song: please try again');
     }
   }
   return (
@@ -37,17 +50,38 @@ const AddSong = () => {
           <input type="text" placeholder="Artist name" className="p-2  rounded-md border  w-[400px]" required value={artist} onChange={(e) => setArtist(e.target.value)} />
         </div>
         <div>
+          <h3>duration</h3>
+          <input type="number" placeholder="song duration" className="p-2  rounded-md border  w-[400px]" value={duration} onChange={(e) => setDuration(Number(e.target.value))} />
+        </div>
+        <div>
           <h3>Song Url</h3>
-          <input type="text" placeholder="Song url" className="p-2  rounded-md border  w-[400px]" required value={url} onChange={(e) => setUrl(e.target.value)} />
+          <input
+            type="file"
+            className="p-2 rounded-md border w-[400px]"
+            required
+            onChange={(e) => {
+              const files = e.target.files;
+              if (files && files.length > 0) {
+                setUrl(files[0]); // Set the first file
+              }
+            }}
+          />
         </div>
         <div>
           <h3>artwork</h3>
-          <input type="text" placeholder="song image" className="p-2  rounded-md border  w-[400px]" required value={artwork} onChange={(e) => setArtwork(e.target.value)} />
+          <input
+            type="file"
+            className="p-2 rounded-md border w-[400px]"
+            required
+            onChange={(e) => {
+              const files = e.target.files;
+              if (files && files.length > 0) {
+                setArtwork(files[0]); // Set the first file
+              }
+            }}
+          />
         </div>
-        <div>
-          <h3>duration</h3>
-          <input type="number" placeholder="song duration" className="p-2  rounded-md border  w-[400px]" required value={duration} onChange={(e) => setDuration(parseInt(e.target.value))} />
-        </div>
+
         <button type="submit" className="bg-blue-400  rounded-md p-2 text-white  w-[400px]" >Add song </button>
       </form>
     </div>
