@@ -48,7 +48,7 @@ const PlaylistTracklistItem = ({ track, selectedTrack }: TrackPlayerListType) =>
                 setFavorites((prevLikedTracks) => [...prevLikedTracks, track]);
             } else {
                 await axios.delete(`https://musicserver-h836.onrender.com/user/66fc66651c032413823ea923/unlike/${track?.id}`);
-                setFavorites((prevLikedTracks) => prevLikedTracks.filter((t) => t.id !== track.id));
+                setFavorites((prevLikedTracks) => prevLikedTracks.filter((t) => t?.id !== track?.id));
 
             }
         } catch (error) {

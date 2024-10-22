@@ -4,6 +4,7 @@ import { useIsFocused } from '@react-navigation/native';
 import FloadPlayer from '../components/FloadPlayer';
 import MusicPlayer from '../components/MusicPlayer';
 import PlaylistsDetailsScreen from '../components/PlaylistsTracksList';
+import PodcastsLists from '../homeComponents/PodcastsLists';
 
 export type RootStackParamList = {
     FloadPlayer: undefined;
@@ -16,6 +17,7 @@ export type RootStackParamList = {
         };
     }
     PlaylistsDetailsScreen: { playlistId: string, playlistName: string };
+    PodcastsLists:{podcastId: string, podcastName: string }
 };
 
 
@@ -25,7 +27,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 interface PlayerStackProps {
     toggleFloatingPlayerVisibility: (isVisible: boolean) => void;
 }
-const StackNavigation: React.FC<PlayerStackProps> = ({toggleFloatingPlayerVisibility}) => {
+const StackNavigation: React.FC<PlayerStackProps> = ({ toggleFloatingPlayerVisibility }) => {
     const isFoucused = useIsFocused();
     useEffect(() => {
         toggleFloatingPlayerVisibility(!isFoucused);
@@ -41,6 +43,7 @@ const StackNavigation: React.FC<PlayerStackProps> = ({toggleFloatingPlayerVisibi
             <Stack.Screen name="PlaylistsDetailsScreen" component={PlaylistsDetailsScreen} options={{ headerShown: false }} />
             <Stack.Screen name="FloadPlayer" component={FloadPlayer} options={{ headerShown: false }} />
             <Stack.Screen name="MusicPlayer" component={MusicPlayer} options={{ headerShown: false }} />
+            <Stack.Screen name="PodcastsLists" component={PodcastsLists} options={{ headerShown: false }}/>
         </Stack.Navigator >
     );
 };

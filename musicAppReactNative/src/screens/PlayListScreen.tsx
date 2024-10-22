@@ -12,6 +12,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 
 type PlaylistscreenProp = StackNavigationProp<RootStackParamList, 'StackNavigation'>;
 interface PlaylistType {
+    image: string;
     url: string;
     id: string;
     name: string;
@@ -37,7 +38,9 @@ const PlayListScreen: React.FC = () => {
         };
         getUserPlaylist();
     }, []);
+
     const onChangeSearch = (text: React.SetStateAction<string>) => setSearchText(text);
+
     useEffect(() => {
         if (!searchText) { setFilteredTracks(userPlaylist); }
         else {
@@ -73,7 +76,7 @@ const PlayListScreen: React.FC = () => {
                         onPress={() => goToplaylistDetain(item.id, item.name)}>
                         <View style={styles.playlistItem}>
                             <View style={styles.items}>
-                                <Image source={{ uri: item.url || playlistImage }} style={styles.playlistImage} />
+                                <Image source={{ uri: item?.image || playlistImage }} style={styles.playlistImage} />
                                 <Text style={styles.platlistTitle}>{item.name}</Text>
                             </View>
                             <Icon name="chevron-forward-sharp" size={30} />
