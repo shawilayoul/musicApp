@@ -4,48 +4,54 @@ import { FaPlay } from "react-icons/fa";
 
 const SongDetail = () => {
   const [allSongs, setAllSongs] = useState([]);
-
   useEffect(() => {
     const getUserPlaylist = async () => {
       try {
         const response = await axios.get('https://musicserver-h836.onrender.com/track');
         setAllSongs(response.data)
       } catch (error) {
-        console.log('error getting user platlist', error.response ? error.response.data : error.message)
+        console.log('error getting user platlist', error)
       }
     }
     getUserPlaylist()
   }, [])
+ const imageUrl =
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIN6iFDbA-lmBLINiQlt8dSO5qWkqWx003dhJXZN81Sx3HqHCq6yTSC4ZlyBzqeSoGCno&usqp=CAU';
 
   return (
-    <div className="p-2">
-      <h2 className="text-xl font-medium mb-2">All Songs</h2>
-      <table className="shadow-md p-2" cellPadding="10" cellSpacing="0">
-        <thead >
-          <tr>
-            <th>Play</th>
-            <th>Artwork</th>
-            <th>Title</th>
-            <th>Artist</th>
-          </tr>
-        </thead>
-        <tbody>
-          {allSongs.map(({ title, artwork, artist, _id }) => (
-            <tr key={_id}>
-              <td>
-                <FaPlay/>
-              </td>
-              <td>
-                <img src={artwork} alt={`${title} artwork`} width="50" />
-              </td>
-              <td>{title}</td>
-              <td>{artist}</td>
+    <div className="p-6 bg-gray-50">
+      <h2 className="text-2xl font-semibold mb-4 text-gray-800">All Songs</h2>
+      <div className="overflow-x-auto rounded-lg shadow-lg">
+        <table className="min-w-full bg-white border border-gray-300">
+          <thead className="bg-gray-200">
+            <tr>
+              <th className="py-3 px-4 text-left text-gray-700">Play</th>
+              <th className="py-3 px-4 text-left text-gray-700">Artwork</th>
+              <th className="py-3 px-4 text-left text-gray-700">Title</th>
+              <th className="py-3 px-4 text-left text-gray-700">Artist</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  )
+          </thead>
+          <tbody>
+            {allSongs.map(({ title, artwork, artist, _id }) => (
+              <tr key={_id} className="hover:bg-gray-100 transition-colors">
+                <td className="py-3 px-4">
+                  <FaPlay className="text-blue-500 cursor-pointer hover:text-blue-700" />
+                </td>
+                <td className="py-3 px-4">
+                  <img
+                    src={artwork ||imageUrl}
+                    alt={`${title} artwork`}
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
+                </td>
+                <td className="py-3 px-4 text-gray-800">{title}</td>
+                <td className="py-3 px-4 text-gray-600">{artist}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>)
 }
 
 export default SongDetail

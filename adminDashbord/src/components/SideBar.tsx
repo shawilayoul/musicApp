@@ -38,7 +38,6 @@ const SideBar = () => {
           <li className="p-1  hover:bg-blue-300 "><Link to="/playlists">Playlists</Link></li>
           <li className="p-1 hover:bg-blue-300 "><Link to="/playlists/add">Add Playlist</Link></li>
           <li className="p-1 hover:bg-blue-300 "><Link to="/playlists/edit">Edit Playlist</Link></li>
-          <li className="p-1 hover:bg-blue-300 "><Link to="/playlists/view">View Playlist</Link></li>
         </ul>}
 
       </div>
@@ -77,7 +76,7 @@ const SideBar = () => {
         {toggleSongs && <ul className="flex flex-col ml-6 ">
           <li className="p-1  hover:bg-blue-300 "><Link to="/songs/add">Add Song</Link></li>
           <li className="p-1 hover:bg-blue-300 "><Link to="/songs/AddSongToPlaylist">Add Song to Playlist</Link></li>
-          <li className="p-1 hover:bg-blue-300 "><Link to="/songs/detail">Song Details</Link></li>
+          <li className="p-1 hover:bg-blue-300 "><Link to="/songs/detail">All Songs</Link></li>
         </ul>}
 
       </div>

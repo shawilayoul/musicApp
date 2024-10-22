@@ -13,7 +13,7 @@ const AddPlaylist = () => {
   const handelSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
     try {
-      await axios.post('http://localhost:3000/playlist', { name, userId, genre, descriptions, image, lenght })
+      await axios.post('https://musicserver-h836.onrender.com/playlist', { name, userId, genre, descriptions, image, lenght })
       toast.success('playlist created successfully')
       setName("")
       setUserId("")
