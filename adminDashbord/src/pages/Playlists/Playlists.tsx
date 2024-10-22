@@ -25,7 +25,7 @@ const navigate = useNavigate()
         {
           userPlaylist.map(({ name, genre, image ,id}) => {
             return (
-                  <div className="bg-blue-400 rounded-md p-1 shadow-md flex flex-col items-center w-[150px]" onClick={()=>navigate(`/playlists/view/${id}`)}>
+                  <div key={id} className="bg-blue-400 rounded-md p-1 shadow-md flex flex-col items-center w-[150px]" onClick={()=>navigate(`/playlists/view/${id}`)}>
                     <div>
                       <img src={image} alt="playlistImage" className="w-[150px] rounded-sm" />
                     </div>
