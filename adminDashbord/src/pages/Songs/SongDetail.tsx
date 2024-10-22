@@ -11,7 +11,7 @@ const SongDetail = () => {
         const response = await axios.get('https://musicserver-h836.onrender.com/track');
         setAllSongs(response.data)
       } catch (error) {
-        console.log('error getting user platlist', error)
+        console.log('error getting user platlist', error.response ? error.response.data : error.message)
       }
     }
     getUserPlaylist()
