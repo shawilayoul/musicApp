@@ -29,7 +29,7 @@ const FloadPlayer: React.FC = () => {
   return (
     <Pressable style={styles.container} onPress={() => navigation.navigate('StackNavigation', { screen: 'MusicPlayer' })}>
       <View style={styles.imageContainer}>
-        <Image source={{ uri: activeTrack.artwork ?? imageUrl }} style={styles.image} />
+        <Image source={{ uri: activeTrack?.artwork ?? imageUrl }} style={styles.image} />
       </View>
       <View>
         <Text style={playing ? { color: Colors.activeTitle } : { color: Colors.title }}>{activeTrack?.title ?? ''}</Text>

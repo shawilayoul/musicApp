@@ -22,7 +22,7 @@ const MusicPlayer = () => {
     const formatTime = (seconds: number) => {
         const mins = Math.floor(seconds / 60);
         const secs = Math.floor(seconds % 60);
-        return `${mins}: ${secs < 10 ? '0' : ''} ${secs}`;
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
     };
 
     const togglePlayback = async () => {
@@ -65,7 +65,7 @@ const MusicPlayer = () => {
             />
             <View style={styles.progressTime}>
                 <Text style={{ color: Colors.title }}>{formatTime(progress.position)}</Text>
-                <Text style={{ color: Colors.title }}>{formatTime(progress.duration - progress.position)}</Text>
+                <Text style={{ color: Colors.title }}> {formatTime(progress.duration - progress.position)}</Text>
             </View>
 
             <View style={styles.controls}>
@@ -75,7 +75,7 @@ const MusicPlayer = () => {
                 <TouchableOpacity onPress={togglePlayback}>
                     <Icon
                         name={playing ? 'pause-circle' : 'play-circle'}
-                        size={60}
+                        size={70}
                         color={Colors.icon}
                     />
                 </TouchableOpacity>
@@ -96,10 +96,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     artwork: {
-        width: 250,
-        height: 250,
-        marginBottom: 10,
-        marginTop: 10,
+        flex: 1,
+        width: '100%', // Use full width of the item
+        height: undefined, // Maintain aspect ratio
+        aspectRatio: 1, // Adjust to maintain square shape
+        borderRadius: 8,
+        marginBottom: 8,
     },
     title: {
         fontSize: 24,
@@ -127,6 +129,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         width: '90%',
         marginTop: 10,
+        marginBottom: 30,
     },
 });
 
