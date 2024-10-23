@@ -8,19 +8,17 @@ const AddPlaylist = () => {
   const [genre, setGenre] = useState("")
   const [descriptions, setDescriptions] = useState("")
   const [image, setImage] = useState("")
-  const [lenght, setLength] = useState("")
 
   const handelSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
     try {
-      await axios.post('https://musicserver-h836.onrender.com/playlist', { name, userId, genre, descriptions, image, lenght })
+      await axios.post('https://musicserver-h836.onrender.com/playlist', { name, userId, genre, descriptions, image })
       toast.success('playlist created successfully')
       setName("")
       setUserId("")
       setGenre("")
       setDescriptions("")
       setImage("")
-      setLength("")
     } catch (error) {
       toast.error('failed to create playist: please try again')
       console.log(error)
@@ -49,10 +47,6 @@ const AddPlaylist = () => {
         <div>
           <h3>Playlist Image</h3>
           <input type="text" placeholder="playlist image" className="p-2  rounded-md border  w-[400px]" required value={image} onChange={(e) => setImage(e.target.value)} />
-        </div>
-        <div>
-          <h3>Playlist Lenght</h3>
-          <input type="text" placeholder="playlist Length" className="p-2 rounded-md border  w-[400px]" required value={lenght} onChange={(e) => setLength(e.target.value)} />
         </div>
         <button type="submit" className="bg-blue-400  rounded-md p-2 text-white  w-[400px]" >Add </button>
       </form>

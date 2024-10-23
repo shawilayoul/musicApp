@@ -11,9 +11,9 @@ import EditArtist from "../pages/Artists/EditArtist"
 import ArtistProfile from "../pages/Artists/ArtistProfile"
 import Events from "../pages/Events/Events"
 import AddEvent from "../pages/Events/AddEvent"
-import Genres from "../pages/Genres/Genres"
-import AddGenre from "../pages/Genres/AddGenre"
-import EditGenre from "../pages/Genres/EditGenre"
+import Genres from "../pages/Podcast/Genres"
+import AddGenre from "../pages/Podcast/AddGenre"
+import EditGenre from "../pages/Podcast/EditGenre"
 import Compose from "../pages/MailBox/Compose"
 import Inbox from "../pages/MailBox/Inbox"
 import View from "../pages/MailBox/View"
@@ -26,9 +26,13 @@ import Statistics from "../pages/Reports/Statistics"
 import Trending from "../pages/Reports/Trending"
 import Visitors from "../pages/Reports/Visitors"
 import AddSong from "../pages/Songs/AddSong"
-import AddSongToPlaylist  from "../pages/Songs/AddSongToPlaylist"
+import AddSongToPlaylist from "../pages/Songs/AddSongToPlaylist"
 import SongDetail from "../pages/Songs/SongDetail"
 import SongsUploader from "../pages/SongsUploader"
+import Ebisodes from "../pages/episodes/Ebisodes"
+import AddEbisode from "../pages/episodes/AddEbisode"
+import EditEbisode from "../pages/episodes/EditEbisode"
+import AddEbisodeToPodcast from "../pages/episodes/AddEbisodeToPodcast"
 
 const router = createBrowserRouter([
     {
@@ -53,6 +57,12 @@ const router = createBrowserRouter([
             { path: "/genres/add", element: <AddGenre /> },
             { path: "/genres/edit", element: <EditGenre /> },
 
+
+            { path: "/ebisodes", element: <Ebisodes /> },
+            { path: "/ebisodes/add", element: <AddEbisode /> },
+            { path: "/ebisodes/edit", element: <EditEbisode /> },
+            { path: "/ebisodes/addToPodcast", element: <AddEbisodeToPodcast /> },
+
             { path: "/mailBox", element: <Inbox /> },
             { path: "/mailBox/compose", element: <Compose /> },
             { path: "/mailBox/view", element: <View /> },
@@ -68,7 +78,7 @@ const router = createBrowserRouter([
             { path: "/reports/visitors", element: <Visitors /> },
 
             { path: "/songs/add", element: <AddSong /> },
-            { path: "/songs/AddSongToPlaylist", element: <AddSongToPlaylist  /> },
+            { path: "/songs/AddSongToPlaylist", element: <AddSongToPlaylist /> },
             { path: "/songs/detail", element: <SongDetail /> },
 
             { path: "/songsUploader", element: <SongsUploader /> },

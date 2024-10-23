@@ -100,11 +100,10 @@ const SideBar = () => {
         </ul>}
 
       </div>
-
-      <div className="genres">
+      <div className="ebisode">
         <div className="flex items-center justify-between w-full p-2  hover:bg-blue-300 " onClick={() => setToggleGenres(!toggleGenres)}>
           <div className="flex items-center gap-3">
-            <SlEarphones /> <h3>Genres</h3>
+            <SlEarphones /> <h3>Ebisodes</h3>
           </div>
 
           <div className="arrow">
@@ -114,9 +113,29 @@ const SideBar = () => {
           </div>
         </div>
         {toggleGenres && <ul className="flex flex-col ml-6 ">
-          <li className="p-1  hover:bg-blue-300 "><Link to="/genres">Genres</Link></li>
-          <li className="p-1 hover:bg-blue-300 "><Link to="/genres/add">Add Genre</Link></li>
-          <li className="p-1 hover:bg-blue-300 "><Link to="/genres/edit">Edit Genre</Link></li>
+          <li className="p-1  hover:bg-blue-300 "><Link to="/ebisodes">Ebisodes</Link></li>
+          <li className="p-1 hover:bg-blue-300 "><Link to="/ebisodes/add">Add Ebisode</Link></li>
+          <li className="p-1 hover:bg-blue-300 "><Link to="/ebisodes/addToPodcast">Add Ebisode to Podcast</Link></li>
+          <li className="p-1 hover:bg-blue-300 "><Link to="/ebisodes/edit">Edit Ebisode</Link></li>
+        </ul>}
+
+      </div>
+      <div className="podcast">
+        <div className="flex items-center justify-between w-full p-2  hover:bg-blue-300 " onClick={() => setToggleGenres(!toggleGenres)}>
+          <div className="flex items-center gap-3">
+            <SlEarphones /> <h3>Podcasts</h3>
+          </div>
+
+          <div className="arrow">
+            {
+              toggleGenres ? <FaAngleDown /> : <FaAngleLeft />
+            }
+          </div>
+        </div>
+        {toggleGenres && <ul className="flex flex-col ml-6 ">
+          <li className="p-1  hover:bg-blue-300 "><Link to="/genres">Podcasts</Link></li>
+          <li className="p-1 hover:bg-blue-300 "><Link to="/genres/add">Add Podcast</Link></li>
+          <li className="p-1 hover:bg-blue-300 "><Link to="/genres/edit">Edit Podcast</Link></li>
         </ul>}
 
       </div>
