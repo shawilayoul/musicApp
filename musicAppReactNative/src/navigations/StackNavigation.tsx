@@ -5,6 +5,7 @@ import FloadPlayer from '../components/FloadPlayer';
 import MusicPlayer from '../components/MusicPlayer';
 import PlaylistsDetailsScreen from '../components/PlaylistsTracksList';
 import PodcastsLists from '../homeComponents/PodcastsLists';
+import ArtistTracksList from '../homeComponents/ArtistTracksList';
 
 export type RootStackParamList = {
     FloadPlayer: undefined;
@@ -18,6 +19,7 @@ export type RootStackParamList = {
     }
     PlaylistsDetailsScreen: { playlistId: string, playlistName: string };
     PodcastsLists:{podcastId: string, podcastName: string }
+    ArtistTracksList:{artistId: string, artistName: string }
 };
 
 
@@ -44,6 +46,7 @@ const StackNavigation: React.FC<PlayerStackProps> = ({ toggleFloatingPlayerVisib
             <Stack.Screen name="FloadPlayer" component={FloadPlayer} options={{ headerShown: false }} />
             <Stack.Screen name="MusicPlayer" component={MusicPlayer} options={{ headerShown: false }} />
             <Stack.Screen name="PodcastsLists" component={PodcastsLists} options={{ headerShown: false }}/>
+            <Stack.Screen name="ArtistTracksList" component={ArtistTracksList} options={{ headerShown: false }}/>
         </Stack.Navigator >
     );
 };

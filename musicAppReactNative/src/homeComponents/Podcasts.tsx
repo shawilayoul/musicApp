@@ -44,15 +44,17 @@ const Podcasts = () => {
                 {podcasts.map(({ title, artwork, id }) => (
                     <TouchableOpacity
                         key={id}
-                        style={styles.playlistCard}
                         onPress={() => goToplaylistDetain(id, title)}
                     >
-                        <Image source={{ uri: artwork }} style={styles.playlistImage} />
+                        <View style={styles.playlistCard}>
+                            <Image source={{ uri: artwork }} style={styles.playlistImage} />
+                        </View>
                         <Text style={styles.playlistName}>{title}</Text>
                     </TouchableOpacity>
+
                 ))}
             </ScrollView>
-        </View>
+        </View >
     );
 };
 
@@ -75,12 +77,13 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
+        width: 130, // Fixed width for images
+        height: 140,
         alignItems: 'center',
-        padding: 8,
     },
     playlistImage: {
-        width: 120, // Fixed width for images
-        height: 120, // Fixed height for images
+        width: '100%',
+        height: '100%',
         borderRadius: 10,
     },
     playlistName: {
@@ -88,9 +91,8 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '500',
         color: '#333', // Dark text for contrast
-        textAlign: 'center',
     },
-    loading:{
-        flex:1,
+    loading: {
+        flex: 1,
     },
 });

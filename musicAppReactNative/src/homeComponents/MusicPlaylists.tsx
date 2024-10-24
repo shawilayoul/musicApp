@@ -59,11 +59,14 @@ const MusicPlaylists = () => {
                 {userPlaylist.map((playlist) => (
                     <TouchableOpacity
                         key={playlist.id}
-                        style={styles.playlistCard}
+
                         onPress={() => goToplaylistDetain(playlist.id, playlist.name)}
                     >
-                        <Image source={{ uri: playlist.image }} style={styles.playlistImage} />
+                        <View style={styles.playlistCard}>
+                            <Image source={{ uri: playlist.image }} style={styles.playlistImage} />
+                        </View>
                         <Text style={styles.playlistName}>{playlist.name}</Text>
+                        <Text>50 Tracks</Text>
                     </TouchableOpacity>
                 ))}
             </ScrollView>
@@ -91,11 +94,12 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 4,
         alignItems: 'center',
-        padding: 8,
+        width: 130, // Fixed width for images
+        height: 150,
     },
     playlistImage: {
-        width: 120, // Fixed width for images
-        height: 120, // Fixed height for images
+        width: '100%', // Fixed width for images
+        height: '100%', // Fixed height for images
         borderRadius: 10,
     },
     playlistName: {
@@ -103,7 +107,6 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '500',
         color: '#333', // Dark text for contrast
-        textAlign: 'center',
         textTransform: 'uppercase'
     },
     loading: {

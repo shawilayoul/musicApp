@@ -1,16 +1,30 @@
-import React from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import React from 'react'
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { RootStackParamList } from '../navigations/StackNavigation';
 
 const trendingSongs = [
-    { id: 1, title: 'Lumiére', artist: 'FJU Lyon', image: 'https://images.pexels.com/photos/3388899/pexels-photo-3388899.jpeg?auto=compress&cs=tinysrgb&w=600' },
-    { id: 2, title: 'Mega Help', artist: 'FJU VillJuif', image: 'https://scontent-cdg4-2.xx.fbcdn.net/v/t39.30808-6/462691489_18356447122189775_1574066158548058831_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=127cfc&_nc_ohc=_ddspqnb_MwQ7kNvgFjZpNO&_nc_ht=scontent-cdg4-2.xx&_nc_gid=AX9CeDsHEwtvq52bdvaJpwS&oh=00_AYAw_k8Um9r17qaopctFL2u9eyJqmPAe-cikcRt5ghWHCg&oe=671201FE' },
-    { id: 3, title: 'Parfum', artist: 'FJU Paris', image: 'https://scontent-cdg4-3.xx.fbcdn.net/v/t39.30808-6/440746150_18333705205189775_7032145191093299904_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=127cfc&_nc_ohc=Mzqg7Wl3QGkQ7kNvgEfO5AT&_nc_ht=scontent-cdg4-3.xx&_nc_gid=AB1KCudjLYsO5M79wUJlZFF&oh=00_AYAhPuQZNRmp8yjr2rOD6clOkCOqIImVNRL-YDxBXn2nDw&oe=67121751' },
-    { id: 4, title: 'Lumiére', artist: 'FJU Lyon', image: 'https://scontent-cdg4-1.xx.fbcdn.net/v/t39.30808-6/369864382_596429732704193_5489624132335544205_n.jpg?stp=c240.0.960.960a_dst-jpg_s206x206&_nc_cat=104&ccb=1-7&_nc_sid=714c7a&_nc_ohc=31LqODMul54Q7kNvgHGP72F&_nc_ht=scontent-cdg4-1.xx&_nc_gid=ANCPO0W0yg2RoZq_H3aPxUp&oh=00_AYBCy9f4BccE6VT94l3o6j7Q5enC3pRE9YtfAdAWdPayNA&oe=67120F4A' },
-    { id: 5, title: 'Mega Help', artist: 'FJU VillJuif', image: 'https://scontent-cdg4-2.xx.fbcdn.net/v/t39.30808-6/462691489_18356447122189775_1574066158548058831_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=127cfc&_nc_ohc=_ddspqnb_MwQ7kNvgFjZpNO&_nc_ht=scontent-cdg4-2.xx&_nc_gid=AX9CeDsHEwtvq52bdvaJpwS&oh=00_AYAw_k8Um9r17qaopctFL2u9eyJqmPAe-cikcRt5ghWHCg&oe=671201FE' },
+    { id: 1, title: 'Mary', artist: 'FJU Lyon', image: 'https://images.pexels.com/photos/2531728/pexels-photo-2531728.jpeg?auto=compress&cs=tinysrgb&w=600' },
+    { id: 2, title: 'John Doe', artist: 'FJU VillJuif', image: 'https://images.pexels.com/photos/6174126/pexels-photo-6174126.jpeg?auto=compress&cs=tinysrgb&w=600' },
+    { id: 4, title: 'Kaique Rocha', artist: 'FJU Lyon', image: 'https://images.pexels.com/photos/379962/pexels-photo-379962.jpeg?auto=compress&cs=tinysrgb&w=600' },
+    { id: 5, title: 'Papa yaw', artist: 'FJU VillJuif', image: 'https://images.pexels.com/photos/3388899/pexels-photo-3388899.jpeg?auto=compress&cs=tinysrgb&w=600' },
     { id: 6, title: 'Parfum', artist: 'FJU Paris', image: 'https://scontent-cdg4-3.xx.fbcdn.net/v/t39.30808-6/440746150_18333705205189775_7032145191093299904_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=127cfc&_nc_ohc=Mzqg7Wl3QGkQ7kNvgEfO5AT&_nc_ht=scontent-cdg4-3.xx&_nc_gid=AB1KCudjLYsO5M79wUJlZFF&oh=00_AYAhPuQZNRmp8yjr2rOD6clOkCOqIImVNRL-YDxBXn2nDw&oe=67121751' },
 ];
+type PlaylistscreenProp = StackNavigationProp<RootStackParamList, 'StackNavigation'>;
 
-const TrendingSongs = () => {
+
+const Artists = () => {
+    const navigation = useNavigation<PlaylistscreenProp>();
+    const goToArtistsLists = (playlistId: string, playlistName: string) => {
+        navigation.navigate('StackNavigation', {
+            screen: 'ArtistTracksList',
+            params: {
+                playlistId,
+                playlistName,
+            },
+        });
+    };
     return (
         <View style={styles.container}>
             <ScrollView
@@ -22,6 +36,7 @@ const TrendingSongs = () => {
                     <TouchableOpacity
                         key={song.id}
                         style={styles.songCard}
+                        onPress={() => goToArtistsLists(song.id, song.title)}
                     >
                         <Image source={{ uri: song.image }} style={styles.songImage} />
                         <Text style={styles.songTitle}>{song.title}</Text>
@@ -33,7 +48,7 @@ const TrendingSongs = () => {
     );
 };
 
-export default TrendingSongs;
+export default Artists;
 
 
 const styles = StyleSheet.create({
@@ -48,12 +63,12 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         marginRight: 16, // Space between cards
         alignItems: 'center',
-      // Fixed width for cards
+        // Fixed width for cards
     },
     songImage: {
         width: 130, // Fixed width for images
         height: 130, // Fixed height for images
-        borderRadius:100,
+        borderRadius: 100,
     },
     songTitle: {
         marginTop: 8,

@@ -97,11 +97,11 @@ export default PlayListScreen;
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
-        backgroundColor: '#ffffff', // Clean, bright background
+        backgroundColor: '#f0f0f0', // Clean, bright background
     },
     container: {
         flex: 1,
-        padding: 16,
+        paddingHorizontal: 10,
     },
     notFound: {
         flex: 1,
@@ -115,9 +115,9 @@ const styles = StyleSheet.create({
     },
     playlistItem: {
         flex: 1,
-        margin: 8, // Space between items
+        margin: 6, // Space between items
         padding: 16,
-        backgroundColor: '#f9f9f9', // Soft background for items
+        backgroundColor: '#ffffff',// '#f9f9f9', // Soft background for items
         borderRadius: 12,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
