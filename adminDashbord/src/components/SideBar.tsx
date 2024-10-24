@@ -3,6 +3,7 @@ import { MdOutlineDashboard, MdMailOutline, MdOutlineTrendingUp } from "react-ic
 import { IoMdAlbums } from "react-icons/io";
 import { SlEarphones } from "react-icons/sl";
 import { TbPlaylist } from "react-icons/tb";
+import { SiGooglepodcasts } from "react-icons/si";
 import { FaAngleLeft, FaAngleDown, FaRegUser, FaRegCalendarAlt, FaMusic } from "react-icons/fa";
 import { useState } from "react";
 
@@ -15,6 +16,7 @@ const SideBar = () => {
   const [togglePlaylists, setTogglePlaylists] = useState(false)
   const [toggleReports, setToggleReports] = useState(false)
   const [toggleSongs, setToggleSongs] = useState(false)
+  const [toggleEpisode, setToggleEpisode] = useState(false)
 
   return (
     <div className="flex flex-col p-5 gap-3 mt-[60px]">
@@ -100,45 +102,45 @@ const SideBar = () => {
         </ul>}
 
       </div>
-      <div className="ebisode">
+      <div className="podcast">
         <div className="flex items-center justify-between w-full p-2  hover:bg-blue-300 " onClick={() => setToggleGenres(!toggleGenres)}>
+          <div className="flex items-center gap-3">
+            <SiGooglepodcasts /> <h3>Podcasts</h3>
+          </div>
+
+          <div className="arrow">
+            {
+              toggleGenres ? <FaAngleDown /> : <FaAngleLeft />
+            }
+          </div>
+        </div>
+        {toggleGenres && <ul className="flex flex-col ml-6 ">
+          <li className="p-1  hover:bg-blue-300 "><Link to="/podcasts">Podcasts</Link></li>
+          <li className="p-1 hover:bg-blue-300 "><Link to="/podcast/add">Add Podcast</Link></li>
+          <li className="p-1 hover:bg-blue-300 "><Link to="/podcast/edit">Edit Podcast</Link></li>
+        </ul>}
+
+      </div>
+      <div className="ebisode">
+        <div className="flex items-center justify-between w-full p-2  hover:bg-blue-300 " onClick={() => setToggleEpisode(!toggleEpisode)}>
           <div className="flex items-center gap-3">
             <SlEarphones /> <h3>Ebisodes</h3>
           </div>
 
           <div className="arrow">
             {
-              toggleGenres ? <FaAngleDown /> : <FaAngleLeft />
+              toggleEpisode ? <FaAngleDown /> : <FaAngleLeft />
             }
           </div>
         </div>
-        {toggleGenres && <ul className="flex flex-col ml-6 ">
+        {toggleEpisode && <ul className="flex flex-col ml-6 ">
           <li className="p-1  hover:bg-blue-300 "><Link to="/ebisodes">Ebisodes</Link></li>
           <li className="p-1 hover:bg-blue-300 "><Link to="/ebisodes/add">Add Ebisode</Link></li>
-          <li className="p-1 hover:bg-blue-300 "><Link to="/ebisodes/addToPodcast">Add Ebisode to Podcast</Link></li>
           <li className="p-1 hover:bg-blue-300 "><Link to="/ebisodes/edit">Edit Ebisode</Link></li>
         </ul>}
 
       </div>
-      <div className="podcast">
-        <div className="flex items-center justify-between w-full p-2  hover:bg-blue-300 " onClick={() => setToggleGenres(!toggleGenres)}>
-          <div className="flex items-center gap-3">
-            <SlEarphones /> <h3>Podcasts</h3>
-          </div>
 
-          <div className="arrow">
-            {
-              toggleGenres ? <FaAngleDown /> : <FaAngleLeft />
-            }
-          </div>
-        </div>
-        {toggleGenres && <ul className="flex flex-col ml-6 ">
-          <li className="p-1  hover:bg-blue-300 "><Link to="/genres">Podcasts</Link></li>
-          <li className="p-1 hover:bg-blue-300 "><Link to="/genres/add">Add Podcast</Link></li>
-          <li className="p-1 hover:bg-blue-300 "><Link to="/genres/edit">Edit Podcast</Link></li>
-        </ul>}
-
-      </div>
       <div className="reports">
         <div className="flex items-center justify-between w-full p-2  hover:bg-blue-300 " onClick={() => setToggleReports(!toggleReports)}>
           <div className="flex items-center gap-3">

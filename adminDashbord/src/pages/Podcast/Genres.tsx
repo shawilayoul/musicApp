@@ -27,7 +27,7 @@ const Genres = () => {
           <div
             key={id}
             className="bg-gradient-to-r from-blue-500 to-blue-700 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105"
-            onClick={() => navigate(`/playlists/view/${id}`)}
+            onClick={() => navigate(`/podcast/view/${id}`)}
           >
             <img
               src={artwork}

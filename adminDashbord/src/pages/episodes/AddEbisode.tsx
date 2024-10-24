@@ -1,14 +1,36 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import axios from "axios"
 import { toast } from 'react-toastify';
 
+
+interface Podcasts {
+  id: string,
+  title: string,
+  artwork: string,
+  description: string
+}
 const AddEbisode = () => {
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [podcastId, setPodcastId] = useState("")
+  const [podcasts, setPodcasts] = useState<Podcasts[]>([]);
   const [artwork, setArtwork] = useState<File | null>(null)
   const [url, setUrl] = useState<File | null>(null)
 
+  useEffect(() => {
+    getAllPodcasts()
+  }, [])
+  //get alll podcasts
+
+  const getAllPodcasts = async () => {
+    try {
+      const response = await axios.get('https://musicserver-h836.onrender.com/podcast');
+      setPodcasts(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  console.log(podcasts)
   const handelSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
     const formData = new FormData();
@@ -19,8 +41,6 @@ const AddEbisode = () => {
     if (artwork) formData.append('files', artwork);
 
     // Assuming `artwork` is also a file input
-
-
     try {
       const response = await axios.post('https://musicserver-h836.onrender.com/episode', formData, {
         headers: {
@@ -53,8 +73,19 @@ const AddEbisode = () => {
           <input type="text" placeholder="Enter description" className="p-2  rounded-md border  w-[400px]" required value={description} onChange={(e) => setDescription(e.target.value)} />
         </div>
         <div>
-          <h3>PodcastId</h3>
-          <input type="text" placeholder="Enter PodcastId" className="p-2  rounded-md border  w-[400px]" required value={podcastId} onChange={(e) => setPodcastId(e.target.value)} />
+          <select
+            id="playlist"
+            value={podcastId}
+            onChange={(e) => setPodcastId(e.target.value)}
+            className="p-2  rounded-md border  w-[400px]"
+          >
+            <option>-- Select Podcast --</option>
+            {podcasts.map((podcast) => (
+              <option key={podcast?.id} value={podcast?.id}>
+                {podcast.title}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           <h3>Ebisode Url</h3>

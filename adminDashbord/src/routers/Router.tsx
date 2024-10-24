@@ -32,7 +32,7 @@ import SongsUploader from "../pages/SongsUploader"
 import Ebisodes from "../pages/episodes/Ebisodes"
 import AddEbisode from "../pages/episodes/AddEbisode"
 import EditEbisode from "../pages/episodes/EditEbisode"
-import AddEbisodeToPodcast from "../pages/episodes/AddEbisodeToPodcast"
+import ViewPodcastLists from "../pages/Podcast/ViewPodcastLists"
 
 const router = createBrowserRouter([
     {
@@ -53,15 +53,15 @@ const router = createBrowserRouter([
             { path: "/events", element: <Events /> },
             { path: "/events/add", element: <AddEvent /> },
 
-            { path: "/genres", element: <Genres /> },
-            { path: "/genres/add", element: <AddGenre /> },
-            { path: "/genres/edit", element: <EditGenre /> },
-
+            { path: "/podcasts", element: <Genres /> },
+            { path: "/podcast/add", element: <AddGenre /> },
+            { path: "/podcast/edit", element: <EditGenre /> },
+            { path: "/podcast/view/:id", element: <ViewPodcastLists /> },
 
             { path: "/ebisodes", element: <Ebisodes /> },
             { path: "/ebisodes/add", element: <AddEbisode /> },
             { path: "/ebisodes/edit", element: <EditEbisode /> },
-            { path: "/ebisodes/addToPodcast", element: <AddEbisodeToPodcast /> },
+            
 
             { path: "/mailBox", element: <Inbox /> },
             { path: "/mailBox/compose", element: <Compose /> },

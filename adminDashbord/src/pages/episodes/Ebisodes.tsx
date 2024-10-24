@@ -9,7 +9,7 @@ const imageUrl =
 const Ebisodes = () => {
   const [ebisodes, setEbisodes] = useState([]);
   useEffect(() => {
-    const getUserPlaylist = async () => {
+    const getEpisodes = async () => {
       try {
         const response = await axios.get('https://musicserver-h836.onrender.com/episode');
         setEbisodes(response.data)
@@ -17,7 +17,7 @@ const Ebisodes = () => {
         console.log('error getting episode', error)
       }
     }
-    getUserPlaylist()
+    getEpisodes()
   }, [])
 
 
