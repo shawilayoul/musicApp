@@ -1,62 +1,48 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import TrackPlayer from 'react-native-track-player';
+import LoadingSpinner from '../components/LoadingSpinner';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../navigations/StackNavigation';
+import { RouteProp } from '@react-navigation/native';
 
-const episodes = [
-    {
-        'id': 101,
-        'title': 'Episode 1',
-        'description': 'Description of Episode 1',
-        'audioUrl': 'https://firebasestorage.googleapis.com/v0/b/fjusongs.appspot.com/o/toutes-les-femmes-de-ma-vie-164527.mp3?alt=media&token=54fe8c50-1907-4376-ad60-02bd7c4eb90a',
-        artwork: 'https://firebasestorage.googleapis.com/v0/b/fjusongs.appspot.com/o/uploads%2FfaithTalk.jpg?alt=media&token=babed975-0497-4ed7-bc99-5be3b28775a6'
-    },
-    {
-        'id': 102,
-        'title': 'Episode 2',
-        'description': 'Description of Episode 2',
-        'audioUrl': 'https://firebasestorage.googleapis.com/v0/b/fjusongs.appspot.com/o/group-talking-68823.mp3?alt=media&token=7d2912dd-bb4c-41f5-8c65-d9154e830ab0',
-        artwork: 'https://firebasestorage.googleapis.com/v0/b/fjusongs.appspot.com/o/uploads%2FfaithTalk.jpg?alt=media&token=babed975-0497-4ed7-bc99-5be3b28775a6',
-    },
-    {
-        'id': 103,
-        'title': 'Episode 3',
-        'description': 'Description of Episode 3',
-        'audioUrl': 'https://firebasestorage.googleapis.com/v0/b/fjusongs.appspot.com/o/people-who-are-talking-in-a-courtyard-in-kotor-montenegro-19511.mp3?alt=media&token=5509baab-c7cc-47d2-9a5a-f6162112bda6',
-        artwork: 'https://scontent-cdg4-3.xx.fbcdn.net/v/t39.30808-6/449171017_18341427214189775_6697200753818002513_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=127cfc&_nc_ohc=4BVGM8yVyr0Q7kNvgGcEkHq&_nc_ht=scontent-cdg4-3.xx&_nc_gid=ArHM3s8jiHb_0Uce5-xZzs2&oh=00_AYC8CGh0xn-HLW6zoxNq3fKAWkooh6Zz3MZpryoUk-eezw&oe=67120DFB'
-    },
-    {
-        'id': 104,
-        'title': 'Episode 4',
-        'description': 'Description of Episode 4',
-        'audioUrl': 'https://firebasestorage.googleapis.com/v0/b/fjusongs.appspot.com/o/people-talking-ambience-24394.mp3?alt=media&token=6cfc33f1-4bb3-4633-8b9a-f818dbc07e73',
-        artwork: 'https://firebasestorage.googleapis.com/v0/b/fjusongs.appspot.com/o/uploads%2FfaithTalk.jpg?alt=media&token=babed975-0497-4ed7-bc99-5be3b28775a6',
-    },
-];
+interface Episode {
+    url: string;
+    id: string ;
+    title: string;
+    description: string;
+    artwork: string;
+}
+interface Props {
+    navigation: DetailsScreenNavigationProp;
+    route: DetailsScreenRouteProp;
+}
+type DetailsScreenNavigationProp = StackNavigationProp<RootStackParamList, 'PodcastsLists'>;
+type DetailsScreenRouteProp = RouteProp<RootStackParamList, 'PodcastsLists'>;
 
-
-const PodcastsLists = ({ route }) => {
-    const [podcasts, setPodcasts] = useState([]);
+const PodcastsLists: React.FC<Props> = ({ route }) => {
+    const [episodes, setEpisodes] = useState<Episode[]>([]);
     const [loading, setLoading] = useState(true);
-    const [playingEpisodeId, setPlayingEpisodeId] = useState(null);
+    const [playingEpisodeId, setPlayingEpisodeId] = useState<string | null>(null);
     const { podcastId,
         podcastName } = route.params;
 
-    /* useEffect(() => {
-         const fetchPodcasts = async () => {
-             try {
-                 const response = await fetch('https://api.example.com/podcasts'); // Replace with your API
-                 const data = await response.json();
-                 setPodcasts(data);
-             } catch (error) {
-                 console.error('Error fetching podcasts:', error);
-             } finally {
-                 setLoading(false);
-             }
-         };
- 
-         fetchPodcasts();
-     }, []);*/
-     const playEpisode = async (episode) => {
+    useEffect(() => {
+        const getPodcastEpisodes = async () => {
+            try {
+                const response = await axios.get(`https://musicserver-h836.onrender.com/podcast/podcastEpisode/${podcastId}`);
+                setEpisodes(response.data.episodes);
+            } catch (error) {
+                console.log('error getting user platlist', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        getPodcastEpisodes();
+    }, [podcastId]);
+
+    const playEpisode = async (episode: Episode) => {
         if (playingEpisodeId === episode.id) {
             // Pause if the same episode is clicked
             await TrackPlayer.pause();
@@ -65,9 +51,8 @@ const PodcastsLists = ({ route }) => {
             await TrackPlayer.reset();
             await TrackPlayer.add({
                 id: episode.id.toString(),
-                url: episode.audioUrl,
+                url: episode.url,
                 title: episode.title,
-                artist: 'Podcast Artist',
                 artwork: episode.artwork,
             });
             await TrackPlayer.play();
@@ -75,9 +60,9 @@ const PodcastsLists = ({ route }) => {
         }
     };
 
-    /* if (loading) {
-         return <ActivityIndicator size="large" color="#0000ff" />;
-     }*/
+    if (loading) {
+        return <LoadingSpinner />;
+    }
 
     return (
         <View style={styles.container}>
@@ -86,20 +71,19 @@ const PodcastsLists = ({ route }) => {
                 data={episodes}
                 keyExtractor={episode => episode.id.toString()}
                 numColumns={2}
-                renderItem={({ item: episode }) => (
-                    <View style={styles.episodeItem}>
-                        <Image source={{ uri: episode.artwork }} style={styles.episodeImage} />
-                        <Text style={styles.episodeTitle}>{episode.title}</Text>
-                        <Text style={styles.episodeDescription}>{episode.description}</Text>
+                renderItem={({ item }: { item: Episode }) => (
+                    <View style={styles.episodeCard}>
+                        <Image source={{ uri: item.artwork }} style={styles.episodeImage} />
+                        <View style={styles.episodeDetails}>
+                            <Text style={styles.episodeTitle}>{item.title}</Text>
+                        </View>
                         <TouchableOpacity
                             style={styles.playButton}
-                            onPress={() => playEpisode(episode)}
+                            onPress={() => playEpisode(item)}
                         >
-                            {playingEpisodeId === episode.id ? (
-                                <Text style={styles.buttonText}>Pause</Text>
-                            ) : (
-                                <Text style={styles.buttonText}>Play</Text>
-                            )}
+                            <Text style={styles.buttonText}>
+                                {playingEpisodeId === item.id ? 'Pause' : 'Play'}
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 )}
@@ -109,6 +93,7 @@ const PodcastsLists = ({ route }) => {
 };
 
 export default PodcastsLists;
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -121,7 +106,7 @@ const styles = StyleSheet.create({
         marginBottom: 16,
         color: '#333',
     },
-    episodeItem: {
+    episodeCard: {
         flex: 1,
         margin: 8,
         padding: 16,
@@ -130,25 +115,30 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         backgroundColor: '#f9f9f9',
         shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
+        shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.2,
         shadowRadius: 1.5,
         elevation: 2,
-        alignItems: 'center',
+        flexDirection: 'column',
+        justifyContent: 'space-between', // Ensures button is at the bottom
+        height: 300, // Fixed height to keep consistent spacing
     },
     episodeImage: {
         width: '100%',
-        height: 100,
+        height: 150,
         borderRadius: 8,
         marginBottom: 8,
+    },
+    episodeDetails: {
+        flex: 1, // Take available space
+        alignItems: 'center',
+        justifyContent: 'center', // Center text vertically
     },
     episodeTitle: {
         fontSize: 16,
         fontWeight: '600',
         color: '#333',
+        textAlign: 'center',
         marginBottom: 4,
     },
     episodeDescription: {
@@ -161,12 +151,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#007bff',
         padding: 10,
         borderRadius: 5,
+        width: '100%', // Full width button
     },
     buttonText: {
         color: '#fff',
         fontWeight: 'bold',
+        textAlign: 'center',
     },
 });
-
 
 

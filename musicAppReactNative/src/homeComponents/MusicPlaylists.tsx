@@ -50,39 +50,61 @@ const MusicPlaylists = () => {
         </View>;
     }
     return (
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalScroll}>
-            {userPlaylist.map((playlist) => (
-                <TouchableOpacity key={playlist.id} style={styles.playlistCard}  onPress={() => goToplaylistDetain(playlist.id, playlist.name)}>
-                    <Image source={{ uri: playlist.image }} style={styles.playlistImage} />
-                    <Text style={styles.playlistName}>{playlist.name}</Text>
-                </TouchableOpacity>
-            ))}
-        </ScrollView>
+        <View style={styles.container}>
+            <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.horizontalScroll}
+            >
+                {userPlaylist.map((playlist) => (
+                    <TouchableOpacity
+                        key={playlist.id}
+                        style={styles.playlistCard}
+                        onPress={() => goToplaylistDetain(playlist.id, playlist.name)}
+                    >
+                        <Image source={{ uri: playlist.image }} style={styles.playlistImage} />
+                        <Text style={styles.playlistName}>{playlist.name}</Text>
+                    </TouchableOpacity>
+                ))}
+            </ScrollView>
+        </View>
     );
 };
 
 export default MusicPlaylists;
 
 const styles = StyleSheet.create({
+    container: {
+        backgroundColor: '#f0f0f0', // Gray background for the entire container
+        paddingVertical: 16,
+    },
     horizontalScroll: {
-        marginLeft: 10,
+        paddingHorizontal: 16, // Space around the scrollable area
     },
     playlistCard: {
-        marginRight: 5,
-        width: 120,
+        backgroundColor: '#fff', // White background for each card
+        borderRadius: 12,
+        marginRight: 16, // Space between cards
+        elevation: 2, // Shadow for depth
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
         alignItems: 'center',
+        padding: 8,
     },
     playlistImage: {
-        width: 110,
-        height: 110,
+        width: 120, // Fixed width for images
+        height: 120, // Fixed height for images
         borderRadius: 10,
     },
     playlistName: {
-        marginTop: 5,
+        marginTop: 8,
         fontSize: 14,
-        fontWeight: '600',
-        color: '#333',
-        textTransform:'uppercase',
+        fontWeight: '500',
+        color: '#333', // Dark text for contrast
+        textAlign: 'center',
+        textTransform: 'uppercase'
     },
     loading: {
         flex: 1,

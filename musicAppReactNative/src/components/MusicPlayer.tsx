@@ -48,6 +48,9 @@ const MusicPlayer = () => {
             console.log('No previous track available', error);
         }
     };
+    // Default duration and position values
+    const currentDuration = progress.duration > 0 ? progress.duration : 1; // Avoids division by zero
+    const currentPosition = progress.position > 0 ? progress.position : 0;
 
     return (
         <SafeAreaView style={styles.container}>
@@ -56,16 +59,16 @@ const MusicPlayer = () => {
             <Text style={styles.artist}>{activeTrack?.artist ?? 'unknow artist'} </Text>
             <Slider
                 style={styles.progress}
-                value={progress.position}
+                value={currentPosition}
                 minimumValue={0}
-                maximumValue={progress.duration}
+                maximumValue={currentDuration}
                 onSlidingComplete={async value => {
                     await TrackPlayer.seekTo(value);
                 }}
             />
             <View style={styles.progressTime}>
-                <Text style={{ color: Colors.title }}>{formatTime(progress.position)}</Text>
-                <Text style={{ color: Colors.title }}> {formatTime(progress.duration - progress.position)}</Text>
+                <Text style={{ color: Colors.title }}>{formatTime(currentPosition)}</Text>
+                <Text style={{ color: Colors.title }}> {formatTime(currentDuration - currentPosition)}</Text>
             </View>
 
             <View style={styles.controls}>

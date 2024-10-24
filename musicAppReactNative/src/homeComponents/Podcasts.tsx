@@ -1,22 +1,29 @@
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React from 'react';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { RootStackParamList } from '../navigations/StackNavigation';
+import axios from 'axios';
 
-const podcasts = [
-    { id: '1', name: 'IntelliMen', image: 'https://firebasestorage.googleapis.com/v0/b/fjusongs.appspot.com/o/uploads%2FfaithTalk.jpg?alt=media&token=babed975-0497-4ed7-bc99-5be3b28775a6' },
-    { id: '2', name: 'Connexion Fun', image: 'https://scontent-cdg4-3.xx.fbcdn.net/v/t39.30808-6/449171017_18341427214189775_6697200753818002513_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=127cfc&_nc_ohc=4BVGM8yVyr0Q7kNvgGcEkHq&_nc_ht=scontent-cdg4-3.xx&_nc_gid=ArHM3s8jiHb_0Uce5-xZzs2&oh=00_AYC8CGh0xn-HLW6zoxNq3fKAWkooh6Zz3MZpryoUk-eezw&oe=67120DFB' },
-    { id: '3', name: 'Faith Talk', image: 'https://firebasestorage.googleapis.com/v0/b/fjusongs.appspot.com/o/uploads%2FfaithTalk.jpg?alt=media&token=babed975-0497-4ed7-bc99-5be3b28775a6' },
-    { id: '4', name: 'IntelliMen', image: 'https://firebasestorage.googleapis.com/v0/b/fjusongs.appspot.com/o/uploads%2FfaithTalk.jpg?alt=media&token=babed975-0497-4ed7-bc99-5be3b28775a6' },
-    { id: '5', name: 'Connexion Fun', image: 'https://scontent-cdg4-3.xx.fbcdn.net/v/t39.30808-6/449171017_18341427214189775_6697200753818002513_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=127cfc&_nc_ohc=4BVGM8yVyr0Q7kNvgGcEkHq&_nc_ht=scontent-cdg4-3.xx&_nc_gid=ArHM3s8jiHb_0Uce5-xZzs2&oh=00_AYC8CGh0xn-HLW6zoxNq3fKAWkooh6Zz3MZpryoUk-eezw&oe=67120DFB' },
-    { id: '6', name: 'Faith Talk', image: 'https://firebasestorage.googleapis.com/v0/b/fjusongs.appspot.com/o/uploads%2FfaithTalk.jpg?alt=media&token=babed975-0497-4ed7-bc99-5be3b28775a6' },
-];
+
 type PlaylistscreenProp = StackNavigationProp<RootStackParamList, 'StackNavigation'>;
 
 
 const Podcasts = () => {
     const navigation = useNavigation<PlaylistscreenProp>();
+    const [podcasts, setPodcasts] = useState([]);
+
+    useEffect(() => {
+        const getPodcasts = async () => {
+            try {
+                const response = await axios.get('https://musicserver-h836.onrender.com/podcast');
+                setPodcasts(response.data);
+            } catch (error) {
+                console.log('error getting podcasts', error);
+            }
+        };
+        getPodcasts();
+    }, []);
 
     const goToplaylistDetain = (podcastId: string, podcastName: string) => {
         navigation.navigate('StackNavigation', {
@@ -28,38 +35,62 @@ const Podcasts = () => {
         });
     };
     return (
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.horizontalScroll}>
-            {podcasts.map((podcast) => (
-                <TouchableOpacity key={podcast.id} style={styles.playlistCard}  onPress={() => goToplaylistDetain(podcast?.id, podcast.name)}>
-                    <Image source={{ uri: podcast.image }} style={styles.playlistImage} />
-                    <Text style={styles.playlistName}>{podcast.name}</Text>
-                </TouchableOpacity>
-            ))}
-        </ScrollView>
+        <View style={styles.container}>
+            <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.horizontalScroll}
+            >
+                {podcasts.map(({ title, artwork, id }) => (
+                    <TouchableOpacity
+                        key={id}
+                        style={styles.playlistCard}
+                        onPress={() => goToplaylistDetain(id, title)}
+                    >
+                        <Image source={{ uri: artwork }} style={styles.playlistImage} />
+                        <Text style={styles.playlistName}>{title}</Text>
+                    </TouchableOpacity>
+                ))}
+            </ScrollView>
+        </View>
     );
 };
 
 export default Podcasts;
 
 const styles = StyleSheet.create({
+    container: {
+        backgroundColor: '#f0f0f0', // Gray background for the entire container
+        paddingVertical: 16,
+    },
     horizontalScroll: {
-        marginLeft: 10,
+        paddingHorizontal: 16, // Space around the scrollable area
     },
     playlistCard: {
-        marginRight: 5,
-        width: 120,
+        backgroundColor: '#fff', // White background for each card
+        borderRadius: 12,
+        marginRight: 16, // Space between cards
+        elevation: 2, // Shadow for depth
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
         alignItems: 'center',
+        padding: 8,
     },
     playlistImage: {
-        width: 110,
-        height: 110,
+        width: 120, // Fixed width for images
+        height: 120, // Fixed height for images
         borderRadius: 10,
     },
     playlistName: {
-        marginTop: 5,
+        marginTop: 8,
         fontSize: 14,
-        fontWeight: '600',
-        color: '#333',
+        fontWeight: '500',
+        color: '#333', // Dark text for contrast
+        textAlign: 'center',
     },
-
+    loading:{
+        flex:1,
+    },
 });

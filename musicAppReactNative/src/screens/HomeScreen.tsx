@@ -11,13 +11,15 @@ const HomeScreen = () => {
             {/* Playlists Section */}
             <Text style={styles.sectionTitle}>Music Playlists</Text>
             <MusicPlaylists />
-            {/* Trending Music */}
-            <Text style={styles.sectionTitle}>Trending Music</Text>
-            <TrendingSongs />
             {/* Podcasts Section */}
             <Text style={styles.sectionTitle}>Podcasts</Text>
             <Podcasts />
-
+            {/* Artists */}
+            <Text style={styles.sectionTitle}>Artists</Text>
+            <TrendingSongs />
+            {/* Trending Music */}
+            <Text style={styles.sectionTitle}>Trending Music</Text>
+            <TrendingSongs />
         </ScrollView>
     );
 };
@@ -27,7 +29,7 @@ export default HomeScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#f0f0f0',
     },
     headerTitle: {
         fontSize: 24,

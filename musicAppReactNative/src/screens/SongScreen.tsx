@@ -64,7 +64,7 @@ const SongsScreen = () => {
         <SafeAreaView>
             <UseSearchHook searchText={searchText} onChangeSearch={onChangeSearch} />
             <UsePlayll playAll={playAll} playing={playing} songs={filteredTracks} />
-            <View>
+            <View style={styles.playAllCart}>
                 <TrackList tracks={filteredTracks} />
             </View>
         </SafeAreaView>
@@ -73,6 +73,9 @@ const SongsScreen = () => {
 
 export default SongsScreen;
 const styles = StyleSheet.create({
+    playAllCart: {
+        marginBottom: 40
+    },
     loading: {
         flex: 1,
     },
